@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Helm
 
-## Getting Started
+**Plan. Navigate. Deliver.**
 
-First, run the development server:
+Helm is a professional project-management command center that will help project managers initiate, plan, execute, monitor, control, and close projects from one connected workspace.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Current status
+
+The repository currently contains the Next.js application shell and its tooling baseline. Supabase setup, authentication, database migrations, and Helm application features are not implemented yet.
+
+## Prerequisites
+
+* Node.js 20 or later
+* npm
+* Chromium installed through Playwright for end-to-end tests
+* Docker or another Supabase-compatible container runtime will be required for future local database work, but is not needed for the current application shell
+
+## Installation
+
+```text
+npm install
+npx playwright install chromium
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` when Supabase integration begins, then provide values for:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```text
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
 
-## Learn More
+Do not commit real environment values or service-role credentials.
 
-To learn more about Next.js, take a look at the following resources:
+## Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open `http://localhost:3000`.
 
-## Deploy on Vercel
+## Quality checks
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```text
+npm run lint
+npm run typecheck
+npm run test
+npm run test:watch
+npm run build
+npm run test:e2e
+npm run test:e2e:ui
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The database test command is reserved for the later Supabase checkpoint:
+
+```text
+npm run test:db
+```
+
+It will not be usable until the repository has been initialized for local Supabase development and database tests have been added.
