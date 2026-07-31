@@ -15,6 +15,8 @@ Before planning or implementing a feature, read:
 * `docs/product-brief.md`
 * `docs/mvp-scope.md`
 * `docs/domain-model.md`
+* `docs/permissions-model.md`
+* `docs/implementation-decisions.md`
 * Any other documentation related to the requested feature
 
 Do not contradict the documented product scope or domain rules without explicitly identifying the conflict.

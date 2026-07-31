@@ -8,7 +8,7 @@ description: Design, review, or modify Helm database tables, migrations, authent
 
 ## Purpose
 
-Protect Helm’s organization and project data through secure database design, server-side authorization, and carefully tested access policies.
+Protect Helm's organization and project data through secure database design, server-side authorization, and carefully tested access policies.
 
 Security must be enforced in the database or trusted server-side logic, not only through the user interface.
 
@@ -29,10 +29,10 @@ Before making security or database changes, read:
 ## Core Security Principles
 
 * Deny access by default.
-* Grant only the permissions required for the user’s role.
+* Grant only the permissions required for the user's role.
 * Every project belongs to one organization.
 * Every protected project record belongs to a project.
-* Organization access does not automatically grant unrestricted project access.
+* Active organization Administrators may access every project in their organization; ordinary organization membership alone does not grant project access.
 * Interface visibility is not a security control.
 * Browser code must never contain service-role credentials or private secrets.
 * User-supplied identifiers must never be trusted without authorization checks.
@@ -81,7 +81,7 @@ Do not commit a real `.env.local` file.
 
 ## Organization Access Model
 
-An organization is Helm’s top-level data boundary.
+An organization is Helm's top-level data boundary.
 
 A user should only access an organization when an active organization-membership record connects the user to it.
 
@@ -105,7 +105,8 @@ Possible rules include:
 
 * The user is an active organization administrator.
 * The user is an active project member.
-* The project has been explicitly shared with the user through an approved mechanism.
+
+Non-administrators require active project membership. An Administrator's organization-wide authority never crosses the organization boundary.
 
 Project membership should include:
 
@@ -123,7 +124,7 @@ Inactive or departed project members should no longer receive active access unle
 
 May:
 
-* View projects within the organization
+* View and administer every project within the organization
 * Manage organization membership
 * Manage organization settings
 * Support project access administration
@@ -180,14 +181,14 @@ For every protected feature, define who can:
 * Archive
 * Delete
 
-Do not use a single vague permission such as “can manage” when different operations require different controls.
+Do not use a single vague permission such as "can manage" when different operations require different controls.
 
 ## Server-Side Authorization
 
 For protected server actions, route handlers, or backend functions:
 
 1. Confirm the user has an authenticated session.
-2. Resolve the user’s identity from the trusted session.
+2. Resolve the user's identity from the trusted session.
 3. Verify organization membership.
 4. Verify project access.
 5. Verify the required role or operation permission.
@@ -222,7 +223,7 @@ A project-record policy should normally confirm:
 
 1. The authenticated user has active access to the parent project.
 2. The project belongs to an organization the user may access.
-3. The requested operation is allowed by the user’s role.
+3. The requested operation is allowed by the user's role.
 4. New or updated records remain inside the authorized project.
 
 Insert and update policies must prevent users from assigning records to unauthorized projects or organizations.

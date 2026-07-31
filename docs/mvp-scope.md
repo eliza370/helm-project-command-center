@@ -12,7 +12,7 @@ A project manager should be able to:
 
 1. Sign in to Helm.
 2. Create a project.
-3. Define the project’s basic information.
+3. Define the project's basic information.
 4. Add project team members and stakeholders.
 5. Add milestones and deliverables.
 6. Record risks, assumptions, issues, and dependencies.
@@ -33,6 +33,7 @@ The project overview should include:
 * Business objective
 * Project manager
 * Project sponsor
+* Project sponsor email (optional)
 * Lifecycle phase
 * Start date
 * Target completion date
@@ -185,6 +186,8 @@ Users should be able to track:
 
 ## Initial User Roles
 
+Helm separates organization roles from project access levels. Organization roles are `Administrator` and `Member`. Project access levels are `Project Manager`, `Project Member`, `Stakeholder`, and `Read Only`. See `docs/permissions-model.md` for access precedence and operation-level permissions.
+
 The MVP should support these roles:
 
 ### Administrator
@@ -206,13 +209,34 @@ The MVP should support these roles:
 * View assigned projects
 * Update assigned records
 * Complete assigned action items
-* Add comments where permitted
 
 ### Stakeholder
 
 * View authorized project information
 * Review status reports
 * Provide approvals where permitted
+
+### Read Only
+
+* View explicitly authorized project information
+* Cannot create, update, close, or cancel project records
+
+## First Development Slice
+
+The first complete vertical slice includes only:
+
+1. Authentication
+2. First-user organization onboarding
+3. Organization membership
+4. Project creation
+5. Automatic project-manager membership
+6. A protected project overview
+7. Manually selected project-health values
+8. Required server-side authorization, validation, and negative-access testing
+
+The first authenticated user creates an organization and becomes its Administrator. Invitations and advanced organization provisioning are deferred. Project creation requires a sponsor name and permits an optional sponsor email; the sponsor does not need a Helm account.
+
+No other project-management modules are part of this first slice. Historical project-health updates are deferred to the status-reporting slice.
 
 ## Explicitly Excluded from the MVP
 
@@ -233,6 +257,10 @@ The following features should not be built during the initial MVP:
 * Complex notification systems
 * Public project pages
 * Customer billing and subscriptions
+* General-purpose comments
+* A generic approval system
+
+Feature-specific approvals, such as change approval and deliverable acceptance, are included only when their corresponding vertical slices are implemented.
 
 ## MVP Success Criteria
 

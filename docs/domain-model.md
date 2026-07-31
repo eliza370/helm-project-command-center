@@ -10,7 +10,7 @@ The data model should support the full project lifecycle while keeping project i
 
 * Every project record must belong to a project.
 * Every project must belong to an organization.
-* Every record should identify who created it and when.
+* Every auditable record should identify who created it and when.
 * Records with ownership should reference a user or project member.
 * Closed records should remain available for reporting and audit purposes.
 * Risks, issues, actions, and decisions should remain separate entities.
@@ -19,10 +19,13 @@ The data model should support the full project lifecycle while keeping project i
 
 ## Shared Fields
 
-Most project records should include:
+Top-level organization-owned entities, including projects and organization memberships, store `organization_id` directly.
+
+Project-scoped operational records normally store `project_id` and derive organization ownership through the parent project. They should not duplicate `organization_id` unless a documented security, performance, or audit requirement justifies it.
+
+Most project-scoped records should include:
 
 * `id`
-* `organization_id`
 * `project_id`
 * `created_by`
 * `created_at`
@@ -82,6 +85,8 @@ An organization member connects a user to an organization.
 * Administrator
 * Member
 
+The first authenticated user creates an organization through a simple onboarding flow and receives an active Administrator membership. Invitations and advanced provisioning are deferred.
+
 ## Projects
 
 A project is the primary workspace in Helm.
@@ -94,7 +99,8 @@ A project is the primary workspace in Helm.
 * `description`
 * `business_objective`
 * `project_manager_id`
-* `sponsor_name`
+* `sponsor_name` (required in the first vertical slice)
+* `sponsor_email` (optional)
 * `lifecycle_phase`
 * `status`
 * `start_date`
@@ -136,6 +142,18 @@ A project is the primary workspace in Helm.
 * Amber
 * Red
 
+In the first vertical slice, all six project-health fields are selected manually. Historical health updates are deferred until the status-reporting vertical slice.
+
+### Initial Lifecycle and Status Validation
+
+* Draft projects begin in the Initiation lifecycle phase.
+* The Closed lifecycle phase is valid only with Completed or Cancelled status.
+* Completed status requires the Closed lifecycle phase.
+* Cancelled status requires the Closed lifecycle phase.
+* The first vertical slice does not require a general transition engine, but trusted validation must reject invalid Closed, Completed, and Cancelled combinations.
+
+Only an active organization Administrator or the assigned Project Manager may close or cancel a project.
+
 ## Project Members
 
 A project member connects a user to a project.
@@ -157,6 +175,8 @@ A project member connects a user to a project.
 * Project Member
 * Stakeholder
 * Read Only
+
+Project access and operation permissions are defined in `docs/permissions-model.md`.
 
 ## Stakeholders
 
@@ -319,6 +339,14 @@ A risk is not an issue. Once the event has occurred, it should be managed as an 
 * Exploit
 * Enhance
 * Share
+
+### Risk Scoring
+
+* Probability uses an integer scale from 1 to 5.
+* Impact uses an integer scale from 1 to 5.
+* Risk score equals probability multiplied by impact and therefore ranges from 1 to 25.
+
+This rule is documented now and will be implemented with the later risk vertical slice.
 
 ## Assumptions
 
@@ -503,7 +531,7 @@ A change request proposes a controlled modification to the project.
 
 ## Project Health Updates
 
-A project health update records the project’s condition at a point in time.
+A project health update records the project's condition at a point in time.
 
 ### Fields
 
@@ -521,6 +549,8 @@ A project health update records the project’s condition at a point in time.
 * `created_at`
 
 Health updates should be preserved to support trends over time.
+
+This entity is deferred until the status-reporting vertical slice and is not part of the first development slice.
 
 ## Status Reports
 
@@ -544,6 +574,16 @@ A status report provides a stakeholder-ready project summary.
 * `created_by`
 * `created_at`
 * `published_at`
+
+Draft reports may derive current values from project source records. Once published, a report becomes a historical snapshot. Published reports preserve their narrative and selected record references so later source-record changes do not rewrite reporting history.
+
+Status-report implementation must define how selected references and their publication-time presentation are preserved.
+
+## Comments and Approvals
+
+General comments are excluded from the initial MVP implementation. Helm will not introduce a generic approval entity or workflow in the initial slices.
+
+Feature-specific approvals, including change-request approval and deliverable acceptance, belong to their respective later vertical slices and must preserve the approver, decision, and timestamp required by that feature.
 
 ## Meetings
 
@@ -639,13 +679,15 @@ An audit event records important changes.
 
 ## Initial Implementation Priority
 
-The first development phase should implement only:
+The first complete vertical slice should implement only:
 
-1. Organizations
-2. Users
-3. Organization members
-4. Projects
-5. Project members
-6. Project health fields
+1. Authentication
+2. First-user organization onboarding
+3. Organizations, users, and organization memberships
+4. Project creation
+5. Automatic Project Manager membership for the project creator
+6. Protected project overview
+7. Manually selected project-health fields
+8. Required authorization and validation
 
 All other entities should be added incrementally as complete vertical features.

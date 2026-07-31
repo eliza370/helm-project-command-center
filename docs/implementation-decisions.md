@@ -1,0 +1,96 @@
+# Helm Implementation Decisions
+
+## Purpose
+
+This document records approved decisions that resolve early product, domain, and authorization questions. Detailed entity definitions remain in `docs/domain-model.md`, and access rules remain in `docs/permissions-model.md`.
+
+## Approved Initial Decisions
+
+### Identity and onboarding
+
+* The first authenticated user creates an organization and becomes its active Administrator.
+* The first implementation may use a simple onboarding flow.
+* Invitations and advanced organization provisioning are deferred.
+
+### Roles and access
+
+* Organization roles are Administrator and Member.
+* Project access levels are Project Manager, Project Member, Stakeholder, and Read Only.
+* Active organization Administrators may view and administer every project in their organization.
+* Ordinary organization membership does not grant project access.
+* Non-administrators require active project membership.
+* Organization Administrators and the assigned Project Manager may edit project details and are the only roles allowed to close or cancel a project.
+
+### Project sponsor
+
+* The first slice stores a required sponsor name and optional sponsor email.
+* The sponsor need not be a registered Helm user.
+* Optional linkage to a user or stakeholder is deferred.
+
+### Project health
+
+* Overall, scope, schedule, budget, resource, and risk health are manually selected in the first slice.
+* Allowed values are Not Assessed, Green, Amber, and Red.
+* Historical `project_health_updates` are deferred to the status-reporting slice.
+
+### Lifecycle and status
+
+* Lifecycle phases are Initiation, Planning, Execution, Monitoring and Control, Closing, and Closed.
+* Project statuses are Draft, Active, On Hold, At Risk, Completed, and Cancelled.
+* Draft projects begin in Initiation.
+* Closed lifecycle is valid only with Completed or Cancelled status.
+* Completed and Cancelled statuses each require Closed lifecycle.
+* The first slice uses focused validation for these combinations and does not introduce a general transition engine.
+
+### Risk scoring
+
+* Probability and impact each use integer scales from 1 to 5.
+* Risk score is `probability * impact`, producing a range from 1 to 25.
+* Implementation is deferred to the risk vertical slice.
+
+### Organization ownership
+
+* Top-level entities such as projects and organization memberships store `organization_id` directly.
+* Project-scoped operational records normally store `project_id` and derive organization ownership through the parent project.
+* A project-scoped table duplicates `organization_id` only when a documented security, performance, or audit need justifies it.
+
+### Comments and approvals
+
+* General comments are excluded from the initial MVP implementation.
+* No generic approval system will be created now.
+* Feature-specific approvals will be implemented with change control, deliverable acceptance, or other relevant later slices.
+
+### Status reports
+
+* Draft reports may derive current values from source records.
+* Published reports are historical snapshots.
+* Published reports preserve narrative content and selected record references so later source changes do not rewrite history.
+
+## First Development Slice
+
+The first vertical slice consists only of:
+
+1. Authentication
+2. First-user organization onboarding
+3. Organization membership
+4. Project creation
+5. Automatic Project Manager membership
+6. Protected project overview
+7. Manually selected health values
+8. Required authorization and validation
+
+No RAID, milestone, deliverable, action, decision, status-report, change-control, closure, comment, generic approval, invitation, or advanced provisioning implementation belongs in this slice.
+
+## Deferred Design Work
+
+Later vertical slices must define:
+
+* Invitation lifecycle and organization provisioning
+* Sponsor linkage to users or stakeholders
+* Historical project-health update behavior
+* Full project lifecycle transition rules, if needed
+* Risk scoring storage and calculation enforcement
+* Per-module create, read, update, status-change, approval, archive, and delete permissions
+* Published status-report snapshot storage and reference presentation
+* Feature-specific approval workflows
+* Audit-event coverage and retention for each governance feature

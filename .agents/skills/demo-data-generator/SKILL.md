@@ -8,7 +8,7 @@ description: Create realistic, internally consistent demonstration and developme
 
 ## Purpose
 
-Create realistic project-management data that allows Helm’s features, dashboards, reports, filters, status indicators, and alerts to be tested meaningfully.
+Create realistic project-management data that allows Helm's features, dashboards, reports, filters, status indicators, and alerts to be tested meaningfully.
 
 Demo data should resemble real projects rather than random placeholder text.
 

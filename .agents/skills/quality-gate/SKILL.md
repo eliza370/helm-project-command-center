@@ -58,7 +58,7 @@ The quality gate covers:
 
 Confirm that:
 
-* The feature supports Helm’s documented product vision.
+* The feature supports Helm's documented product vision.
 * The work matches the requested user outcome.
 * The acceptance criteria are clear and testable.
 * The feature stays within the MVP boundaries.
@@ -309,7 +309,7 @@ Confirm that:
 * Naming is clear and consistent.
 * Unrelated refactoring is avoided.
 
-Do not demand abstraction merely for abstraction’s sake.
+Do not demand abstraction merely for abstraction's sake.
 
 ## 12. Documentation Review
 

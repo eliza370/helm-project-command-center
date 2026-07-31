@@ -103,7 +103,7 @@ Acceptance criteria should cover:
 * Error state
 * Responsive behavior where relevant
 
-Avoid vague criteria such as “looks professional” without defining observable behavior.
+Avoid vague criteria such as "looks professional" without defining observable behavior.
 
 ### 4. Confirm the Domain Model
 
@@ -243,7 +243,7 @@ Do not claim a test passed unless it was run.
 
 ### 11. Run Quality Checks
 
-Run the project’s available checks, including where configured:
+Run the project's available checks, including where configured:
 
 ```text
 npm run lint
@@ -301,7 +301,7 @@ Do not silently discard user-entered data.
 
 ## Tables and Registers
 
-Tables should support the user’s decision-making.
+Tables should support the user's decision-making.
 
 Where relevant, include:
 

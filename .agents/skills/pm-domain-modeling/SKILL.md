@@ -8,7 +8,7 @@ description: Define, review, or modify Helm project-management entities, fields,
 
 ## Purpose
 
-Ensure that Helm’s data structures, workflows, terminology, and business rules accurately support professional project management.
+Ensure that Helm's data structures, workflows, terminology, and business rules accurately support professional project management.
 
 Use `docs/domain-model.md` as the primary domain reference.
 
@@ -202,7 +202,7 @@ When defining or modifying a project-management feature:
 1. Identify the user outcome.
 2. Identify the relevant domain entity.
 3. Confirm whether an existing entity already serves the need.
-4. Define the entity’s purpose in one sentence.
+4. Define the entity's purpose in one sentence.
 5. Define required and optional fields.
 6. Define statuses and allowed transitions.
 7. Define ownership.
