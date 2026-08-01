@@ -6,7 +6,7 @@ Helm is a professional project-management command center that will help project 
 
 ## Current status
 
-The repository contains the Next.js application shell, local Supabase setup, and the first vertical slice database foundation. Authentication interfaces and Helm application features are not implemented yet.
+The repository contains the Next.js application shell, local Supabase database foundation, and cookie-based email/password authentication. Organization onboarding and Helm project features are not implemented yet.
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ npx playwright install chromium
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local` when Supabase integration begins, then provide values for:
+Create an ignored `.env.local` and copy the local browser-safe URL and publishable key reported by `npx supabase status -o env` into:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL=
@@ -32,6 +32,8 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 ```
 
 Do not commit real environment values or service-role credentials.
+
+Local email confirmation is disabled by default. If confirmation is enabled, use the `/auth/confirm` callback and a token-hash email template compatible with Supabase SSR.
 
 ## Development
 
