@@ -6,14 +6,14 @@ Helm is a professional project-management command center that will help project 
 
 ## Current status
 
-The repository currently contains the Next.js application shell and its tooling baseline. Supabase setup, authentication, database migrations, and Helm application features are not implemented yet.
+The repository contains the Next.js application shell, local Supabase setup, and the first vertical slice database foundation. Authentication interfaces and Helm application features are not implemented yet.
 
 ## Prerequisites
 
 * Node.js 20 or later
 * npm
 * Chromium installed through Playwright for end-to-end tests
-* Docker or another Supabase-compatible container runtime will be required for future local database work, but is not needed for the current application shell
+* Docker or another Supabase-compatible container runtime for local database work
 
 ## Installation
 
@@ -53,10 +53,12 @@ npm run test:e2e
 npm run test:e2e:ui
 ```
 
-The database test command is reserved for the later Supabase checkpoint:
+## Local Supabase
 
 ```text
+npx supabase start -x vector,logflare
+npx supabase stop
+npx supabase db reset
 npm run test:db
+npx supabase gen types typescript --local > lib/supabase/database.types.ts
 ```
-
-It will not be usable until the repository has been initialized for local Supabase development and database tests have been added.
