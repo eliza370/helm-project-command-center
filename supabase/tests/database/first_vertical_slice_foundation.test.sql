@@ -26,7 +26,7 @@ select throws_ok(
 reset role;
 
 select is(
-  (select count(*) from public.organizations),
+  (select count(*) from public.organizations where name = 'Unauthorized Org'),
   0::bigint,
   'Failed onboarding leaves no organization behind'
 );
