@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="mx-auto max-w-6xl px-5 py-10" aria-busy="true"><div className="h-8 w-64 animate-pulse rounded bg-slate-200"/><div className="mt-8 h-48 animate-pulse rounded-2xl bg-slate-100"/><p className="sr-only">Loading deliverables</p></main>}

@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -34,13 +34,157 @@ export type Database = {
   }
   public: {
     Tables: {
-      milestones: {
-        Row: { cancelled_at: string | null; completed_at: string | null; created_at: string; created_by: string; description: string | null; id: string; project_id: string; status: string; target_date: string; title: string; updated_at: string }
-        Insert: { cancelled_at?: string | null; completed_at?: string | null; created_at?: string; created_by: string; description?: string | null; id?: string; project_id: string; status?: string; target_date: string; title: string; updated_at?: string }
-        Update: { cancelled_at?: string | null; completed_at?: string | null; created_at?: string; created_by?: string; description?: string | null; id?: string; project_id?: string; status?: string; target_date?: string; title?: string; updated_at?: string }
+      deliverables: {
+        Row: {
+          acceptance_criteria: string
+          accepted_at: string | null
+          accepted_by: string | null
+          cancelled_at: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: string
+          milestone_id: string | null
+          owner_membership_id: string
+          project_id: string
+          review_feedback: string | null
+          status: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          acceptance_criteria: string
+          accepted_at?: string | null
+          accepted_by?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          due_date: string
+          id?: string
+          milestone_id?: string | null
+          owner_membership_id: string
+          project_id: string
+          review_feedback?: string | null
+          status?: string
+          submitted_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          acceptance_criteria?: string
+          accepted_at?: string | null
+          accepted_by?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          due_date?: string
+          id?: string
+          milestone_id?: string | null
+          owner_membership_id?: string
+          project_id?: string
+          review_feedback?: string | null
+          status?: string
+          submitted_at?: string | null
+          title?: string
+          updated_at?: string
+        }
         Relationships: [
-          { foreignKeyName: "milestones_created_by_fkey"; columns: ["created_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
-          { foreignKeyName: "milestones_project_id_fkey"; columns: ["project_id"]; isOneToOne: false; referencedRelation: "projects"; referencedColumns: ["id"] },
+          {
+            foreignKeyName: "deliverables_accepted_by_fkey"
+            columns: ["accepted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_milestone_id_fkey"
+            columns: ["milestone_id"]
+            isOneToOne: false
+            referencedRelation: "milestones"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_owner_membership_id_fkey"
+            columns: ["owner_membership_id"]
+            isOneToOne: false
+            referencedRelation: "project_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deliverables_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      milestones: {
+        Row: {
+          cancelled_at: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          project_id: string
+          status: string
+          target_date: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          project_id: string
+          status?: string
+          target_date: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          project_id?: string
+          status?: string
+          target_date?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "milestones_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "milestones_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
         ]
       }
       organization_members: {
@@ -341,6 +485,69 @@ export type Database = {
         }
         Returns: string
       }
+      get_assignable_deliverable_milestones: {
+        Args: { p_project_id: string }
+        Returns: {
+          id: string
+          target_date: string
+          title: string
+        }[]
+      }
+      get_eligible_deliverable_owners: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          full_name: string
+          membership_id: string
+          user_id: string
+        }[]
+      }
+      get_eligible_project_members: {
+        Args: { p_project_id: string }
+        Returns: {
+          email: string
+          existing_access_level: string
+          full_name: string
+          user_id: string
+        }[]
+      }
+      get_project_deliverables: {
+        Args: { p_project_id: string }
+        Returns: {
+          acceptance_criteria: string
+          accepted_at: string
+          accepted_by: string
+          accepted_by_name: string
+          cancelled_at: string
+          created_at: string
+          description: string
+          due_date: string
+          id: string
+          milestone_id: string
+          milestone_title: string
+          owner_access_level: string
+          owner_membership_id: string
+          owner_name: string
+          project_id: string
+          review_feedback: string
+          status: string
+          submitted_at: string
+          title: string
+          updated_at: string
+        }[]
+      }
+      get_project_team: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          active: boolean
+          email: string
+          full_name: string
+          is_assigned_manager: boolean
+          membership_id: string
+          user_id: string
+        }[]
+      }
       manage_project_membership: {
         Args: {
           p_access_level: string
@@ -350,17 +557,59 @@ export type Database = {
         }
         Returns: string
       }
+      transition_deliverable: {
+        Args: {
+          p_deliverable_id: string
+          p_operation: string
+          p_review_feedback?: string
+        }
+        Returns: {
+          acceptance_criteria: string
+          accepted_at: string | null
+          accepted_by: string | null
+          cancelled_at: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: string
+          milestone_id: string | null
+          owner_membership_id: string
+          project_id: string
+          review_feedback: string | null
+          status: string
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "deliverables"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       transition_milestone: {
         Args: { p_milestone_id: string; p_status: string }
-        Returns: Database["public"]["Tables"]["milestones"]["Row"]
-      }
-      get_project_team: {
-        Args: { p_project_id: string }
-        Returns: { membership_id: string; user_id: string; full_name: string; email: string; access_level: string; active: boolean; is_assigned_manager: boolean }[]
-      }
-      get_eligible_project_members: {
-        Args: { p_project_id: string }
-        Returns: { user_id: string; full_name: string; email: string; existing_access_level: string | null }[]
+        Returns: {
+          cancelled_at: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          project_id: string
+          status: string
+          target_date: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "milestones"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
