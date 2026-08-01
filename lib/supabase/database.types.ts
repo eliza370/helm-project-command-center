@@ -332,6 +332,23 @@ export type Database = {
         }
         Returns: string
       }
+      manage_project_membership: {
+        Args: {
+          p_access_level: string
+          p_active: boolean
+          p_project_id: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      get_project_team: {
+        Args: { p_project_id: string }
+        Returns: { membership_id: string; user_id: string; full_name: string; email: string; access_level: string; active: boolean; is_assigned_manager: boolean }[]
+      }
+      get_eligible_project_members: {
+        Args: { p_project_id: string }
+        Returns: { user_id: string; full_name: string; email: string; existing_access_level: string | null }[]
+      }
     }
     Enums: {
       [_ in never]: never

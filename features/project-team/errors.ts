@@ -1,0 +1,1 @@
+export function getSafeTeamError(error:{code?:string|null}){if(error.code==="42501")return"You do not have permission to manage this project team.";if(error.code==="22023"||error.code==="23505")return"Review the selected member and access level.";return"We could not update team access. Try again."}

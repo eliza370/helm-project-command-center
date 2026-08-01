@@ -1,0 +1,3 @@
+import { z } from "zod";
+export const managedAccessLevels=["Project Member","Stakeholder","Read Only"] as const;
+export const projectMembershipSchema=z.object({projectId:z.uuid("Invalid project."),userId:z.uuid("Select an organization member."),accessLevel:z.enum(managedAccessLevels,"Select a valid access level."),operation:z.enum(["add","update","deactivate","reactivate"]),confirmDeactivate:z.string().optional()}).strict().superRefine((value,context)=>{if(value.operation==="deactivate"&&value.confirmDeactivate!=="confirmed")context.addIssue({code:"custom",path:["confirmDeactivate"],message:"Confirm that you want to deactivate this project membership."})});
