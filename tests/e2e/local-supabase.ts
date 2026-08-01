@@ -1,29 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 
-function getLocalValues() {
-  const command = process.env.ComSpec ?? "cmd.exe";
-  const output = execFileSync(
-    command,
-    ["/d", "/s", "/c", "npx.cmd supabase status -o env"],
-    { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
-  );
-  const values = new Map(
-    output
-      .split(/\r?\n/)
-      .map((line) => line.match(/^([A-Z_]+)="?(.*?)"?$/))
-      .filter((match): match is RegExpMatchArray => Boolean(match))
-      .map((match) => [match[1], match[2].replace(/"$/, "")]),
-  );
-  return values;
-}
-
 export function createLocalUserClient() {
-  const values = getLocalValues();
-  const url = values.get("API_URL");
-  const publicKey = values.get("PUBLISHABLE_KEY") ?? values.get("ANON_KEY");
+  const url = process.env.HELM_E2E_SUPABASE_URL;
+  const publicKey = process.env.HELM_E2E_SUPABASE_PUBLISHABLE_KEY;
 
-  if (!url || !publicKey) throw new Error("Local Supabase test client is unavailable.");
+  if (!url || !publicKey) {
+    throw new Error(
+      "Local Supabase E2E values were not initialized. Run tests through the Playwright configuration.",
+    );
+  }
   return createClient(url, publicKey, { auth: { persistSession: false } });
 }
 
@@ -35,7 +21,7 @@ export async function deleteLocalTestUsers(userIds: string[]) {
   }
 
   const ids = userIds.map((userId) => `'${userId}'`).join(",");
-  const sql = `begin; create temp table helm_e2e_users(id uuid primary key) on commit drop; insert into helm_e2e_users values ${userIds.map((userId) => `('${userId}')`).join(",")}; create temp table helm_e2e_orgs on commit drop as select id from public.organizations where created_by in (select id from helm_e2e_users); create temp table helm_e2e_projects on commit drop as select id from public.projects where organization_id in (select id from helm_e2e_orgs); delete from public.project_members where project_id in (select id from helm_e2e_projects) or user_id in (select id from helm_e2e_users); delete from public.projects where id in (select id from helm_e2e_projects); delete from public.organization_members where user_id in (select id from helm_e2e_users); delete from public.organizations where id in (select id from helm_e2e_orgs); delete from public.profiles where id in (select id from helm_e2e_users); delete from auth.users where id in (${ids}); commit;`;
+  const sql = `begin; create temp table helm_e2e_users(id uuid primary key) on commit drop; insert into helm_e2e_users values ${userIds.map((userId) => `('${userId}')`).join(",")}; create temp table helm_e2e_orgs on commit drop as select id from public.organizations where created_by in (select id from helm_e2e_users); create temp table helm_e2e_projects on commit drop as select id from public.projects where organization_id in (select id from helm_e2e_orgs); delete from public.milestones where project_id in (select id from helm_e2e_projects); delete from public.project_members where project_id in (select id from helm_e2e_projects) or user_id in (select id from helm_e2e_users); delete from public.projects where id in (select id from helm_e2e_projects); delete from public.organization_members where user_id in (select id from helm_e2e_users); delete from public.organizations where id in (select id from helm_e2e_orgs); delete from public.profiles where id in (select id from helm_e2e_users); delete from auth.users where id in (${ids}); commit;`;
 
   execFileSync(
     "docker",

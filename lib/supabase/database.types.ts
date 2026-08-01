@@ -34,6 +34,15 @@ export type Database = {
   }
   public: {
     Tables: {
+      milestones: {
+        Row: { cancelled_at: string | null; completed_at: string | null; created_at: string; created_by: string; description: string | null; id: string; project_id: string; status: string; target_date: string; title: string; updated_at: string }
+        Insert: { cancelled_at?: string | null; completed_at?: string | null; created_at?: string; created_by: string; description?: string | null; id?: string; project_id: string; status?: string; target_date: string; title: string; updated_at?: string }
+        Update: { cancelled_at?: string | null; completed_at?: string | null; created_at?: string; created_by?: string; description?: string | null; id?: string; project_id?: string; status?: string; target_date?: string; title?: string; updated_at?: string }
+        Relationships: [
+          { foreignKeyName: "milestones_created_by_fkey"; columns: ["created_by"]; isOneToOne: false; referencedRelation: "profiles"; referencedColumns: ["id"] },
+          { foreignKeyName: "milestones_project_id_fkey"; columns: ["project_id"]; isOneToOne: false; referencedRelation: "projects"; referencedColumns: ["id"] },
+        ]
+      }
       organization_members: {
         Row: {
           created_at: string
@@ -340,6 +349,10 @@ export type Database = {
           p_user_id: string
         }
         Returns: string
+      }
+      transition_milestone: {
+        Args: { p_milestone_id: string; p_status: string }
+        Returns: Database["public"]["Tables"]["milestones"]["Row"]
       }
       get_project_team: {
         Args: { p_project_id: string }

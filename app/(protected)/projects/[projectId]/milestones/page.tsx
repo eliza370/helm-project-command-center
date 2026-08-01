@@ -1,0 +1,35 @@
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { z } from "zod";
+import { ApplicationShell } from "@/features/organizations/components/application-shell";
+import { getActiveOrganizationMembership } from "@/features/organizations/queries";
+import { canEditProject, getAuthorizedProject } from "@/features/projects/queries";
+import { createClient } from "@/lib/supabase/server";
+import { transitionMilestoneAction } from "@/features/project-milestones/actions";
+import { MilestoneForm } from "@/features/project-milestones/components/milestone-form";
+import { getProjectMilestones } from "@/features/project-milestones/queries";
+import { getMilestoneScheduleLabel, todayDateOnly } from "@/features/project-milestones/schedule";
+
+const messages:Record<string,string>={created:"Milestone added.",edited:"Milestone updated.",completed:"Milestone completed.",cancelled:"Milestone cancelled."};
+const formatDate=(value:string)=>new Intl.DateTimeFormat("en",{dateStyle:"medium",timeZone:"UTC"}).format(new Date(`${value}T00:00:00Z`));
+export default async function MilestonesPage({params,searchParams}:{params:Promise<{projectId:string}>;searchParams:Promise<{edit?:string;updated?:string;error?:string}>}) {
+  const supabase=await createClient();const{data,error}=await supabase.auth.getUser();if(error||!data.user)redirect("/sign-in");
+  const membership=await getActiveOrganizationMembership(supabase,data.user.id);if(membership.status==="none")redirect("/onboarding");if(membership.status==="error")throw new Error("Unable to verify organization access.");
+  const{projectId}=await params;if(!z.uuid().safeParse(projectId).success)notFound();const{data:project,error:projectError}=await getAuthorizedProject(supabase,projectId);if(projectError||!project)notFound();
+  const canManage=await canEditProject(supabase,data.user.id,project,membership.membership);const result=await getProjectMilestones(supabase,project.id);if(result.error)throw new Error("Unable to load milestones.");
+  const query=await searchParams;const milestones=result.data??[];const planned=milestones.filter(m=>m.status==="Planned");const terminal=milestones.filter(m=>m.status!=="Planned");const editing=canManage&&query.edit?planned.find(m=>m.id===query.edit):undefined;
+  const{data:profile}=await supabase.from("profiles").select("full_name").eq("id",data.user.id).maybeSingle();
+  return <ApplicationShell organizationName={membership.membership.organizationName} userLabel={profile?.full_name||data.user.email||"Signed-in user"}><main className="mx-auto max-w-6xl px-5 py-10 sm:px-8">
+    <div className="flex flex-wrap items-start justify-between gap-4"><div><Link href={`/projects/${project.id}`} className="text-sm font-semibold underline underline-offset-4">Back to project</Link><p className="mt-5 text-sm font-semibold text-sky-700">Project schedule</p><h1 className="mt-1 text-3xl font-semibold text-slate-950">{project.name} milestones</h1><p className="mt-2 text-sm text-slate-600">Track meaningful delivery points and their current schedule position.</p></div></div>
+    {query.updated&&messages[query.updated]?<p role="status" className="mt-6 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-900">{messages[query.updated]}</p>:null}{query.error?<p role="alert" className="mt-6 rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm text-rose-900">The milestone could not be changed. Confirm the action and try again.</p>:null}
+    {canManage?<section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h2 className="text-xl font-semibold">{editing?"Edit planned milestone":"Add milestone"}</h2><p className="mt-1 text-sm text-slate-600">{editing?"Only planned milestone details can be edited.":"Create a dated checkpoint for this project."}</p><div className="mt-5"><MilestoneForm projectId={project.id} milestoneId={editing?.id} initialValues={editing?{title:editing.title,description:editing.description??"",targetDate:editing.target_date}:undefined}/></div>{editing?<Link href={`/projects/${project.id}/milestones`} className="mt-4 inline-block text-sm font-semibold underline">Cancel editing</Link>:null}</section>:<p className="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">You have read-only access to project milestones.</p>}
+    <section className="mt-10"><h2 className="text-xl font-semibold">Planned milestones</h2>{planned.length===0?<div className="mt-4 rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center"><p className="font-semibold">No planned milestones</p><p className="mt-1 text-sm text-slate-600">Add the first milestone when the delivery plan is ready.</p></div>:<div className="mt-4 grid gap-4">{planned.map(m=><MilestoneCard key={m.id} milestone={m} projectId={project.id} canManage={canManage}/>)}</div>}</section>
+    {terminal.length?<section className="mt-10"><h2 className="text-xl font-semibold">Completed and cancelled</h2><p className="mt-1 text-sm text-slate-600">Terminal milestones are retained as read-only project records.</p><div className="mt-4 grid gap-4">{terminal.map(m=><MilestoneCard key={m.id} milestone={m} projectId={project.id} canManage={false}/>)}</div></section>:null}
+  </main></ApplicationShell>;
+}
+
+function MilestoneCard({milestone,projectId,canManage}:{milestone:{id:string;title:string;description:string|null;target_date:string;status:string};projectId:string;canManage:boolean}) {
+  const status=milestone.status as "Planned"|"Completed"|"Cancelled";const label=getMilestoneScheduleLabel(milestone.target_date,status,todayDateOnly());
+  return <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div className="flex flex-wrap items-start justify-between gap-3"><div><h3 className="font-semibold text-slate-950">{milestone.title}</h3><p className="mt-1 text-sm text-slate-600">Target {formatDate(milestone.target_date)}</p></div><span className="rounded-full border border-slate-300 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-800">{label}</span></div>{milestone.description?<p className="mt-4 whitespace-pre-wrap text-sm leading-6 text-slate-700">{milestone.description}</p>:null}{canManage?<div className="mt-5 flex flex-wrap gap-3"><Link href={`/projects/${projectId}/milestones?edit=${milestone.id}`} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold">Edit</Link>{(["Completed","Cancelled"] as const).map(status=><form key={status} action={transitionMilestoneAction} className="flex items-center gap-2"><input type="hidden" name="projectId" value={projectId}/><input type="hidden" name="milestoneId" value={milestone.id}/><input type="hidden" name="status" value={status}/><label className="text-xs"><input required type="checkbox" name="confirm" value="confirmed" className="mr-1"/>Confirm</label><button className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold">{status==="Completed"?"Complete":"Cancel"}</button></form>)}</div>:null}</article>;
+}
+
