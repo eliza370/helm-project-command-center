@@ -1,6 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { randomUUID } from "node:crypto";
 
+import { createLocalUserClient, deleteLocalTestUsers } from "./local-supabase";
+
 const testEmail = `helm-e2e-${randomUUID()}@example.test`;
 const testPassword = `Helm-${randomUUID()}-9a!`;
 
@@ -9,10 +11,15 @@ async function signIn(page: Page) {
   await page.getByLabel("Email").fill(testEmail);
   await page.getByLabel("Password").fill(testPassword);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/projects$/);
+  await expect(page).toHaveURL(/\/onboarding$/);
 }
 
 test.describe.serial("Supabase SSR authentication", () => {
+  let testUserId: string | undefined;
+
+  test.afterAll(async () => {
+    if (testUserId) await deleteLocalTestUsers([testUserId]);
+  });
   test("anonymous access to projects redirects to sign-in", async ({ page }) => {
     await page.goto("/projects");
     await expect(page).toHaveURL(/\/sign-in\?next=%2Fprojects$/);
@@ -78,20 +85,25 @@ test.describe.serial("Supabase SSR authentication", () => {
     await page.getByLabel("Password", { exact: true }).fill(testPassword);
     await page.getByLabel("Confirm password").fill(testPassword);
     await page.getByRole("button", { name: "Create account" }).click();
-    await expect(page).toHaveURL(/\/projects$/);
-    await expect(page.getByText("Organization onboarding is the next checkpoint")).toBeVisible();
+    await expect(page).toHaveURL(/\/onboarding$/);
+    await expect(page.getByRole("heading", { name: "Create your Helm workspace" })).toBeVisible();
+
+    const supabase = createLocalUserClient();
+    const { data } = await supabase.auth.signInWithPassword({ email: testEmail, password: testPassword });
+    testUserId = data.user?.id;
+    await supabase.auth.signOut();
   });
 
-  test("authenticated users can access the temporary projects page", async ({ page }) => {
+  test("authenticated users without a workspace are routed to onboarding", async ({ page }) => {
     await signIn(page);
-    await expect(page.getByRole("heading", { name: "Your project workspace is ready for onboarding" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Create your Helm workspace" })).toBeVisible();
   });
 
   test("session persists after refresh", async ({ page }) => {
     await signIn(page);
     await page.reload();
-    await expect(page).toHaveURL(/\/projects$/);
-    await expect(page.getByText(testEmail)).toBeVisible();
+    await expect(page).toHaveURL(/\/onboarding$/);
+    await expect(page.getByRole("heading", { name: "Create your Helm workspace" })).toBeVisible();
   });
 
   test("sign-out clears the authenticated session", async ({ page }) => {
@@ -114,6 +126,6 @@ test.describe.serial("Supabase SSR authentication", () => {
 
   test("created account can sign in again", async ({ page }) => {
     await signIn(page);
-    await expect(page.getByText(testEmail)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Create your Helm workspace" })).toBeVisible();
   });
 });

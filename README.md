@@ -6,7 +6,7 @@ Helm is a professional project-management command center that will help project 
 
 ## Current status
 
-The repository contains the Next.js application shell, local Supabase database foundation, and cookie-based email/password authentication. Organization onboarding and Helm project features are not implemented yet.
+The repository contains the Next.js application shell, local Supabase database foundation, cookie-based email/password authentication, and first-user organization onboarding. Project creation and other Helm project features are not implemented yet.
 
 ## Prerequisites
 

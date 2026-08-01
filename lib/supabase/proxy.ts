@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import type { Database } from "@/lib/supabase/database.types";
 
-const protectedPaths = ["/projects"];
+const protectedPaths = ["/projects", "/onboarding"];
 const authenticationPaths = ["/sign-in", "/sign-up"];
 
 function startsWithPath(pathname: string, paths: string[]) {
