@@ -1,0 +1,8 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { CreateProjectForm } from "@/features/projects/components/create-project-form";
+import { ApplicationShell } from "@/features/organizations/components/application-shell";
+import { getActiveOrganizationMembership } from "@/features/organizations/queries";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function NewProjectPage(){const supabase=await createClient();const {data,error}=await supabase.auth.getUser();if(error||!data.user)redirect("/sign-in");const membership=await getActiveOrganizationMembership(supabase,data.user.id);if(membership.status==="none")redirect("/onboarding");if(membership.status==="error")throw new Error("Unable to verify organization access.");if(membership.membership.role!=="Administrator")redirect("/projects");const {data:profile}=await supabase.from("profiles").select("full_name").eq("id",data.user.id).maybeSingle();return <ApplicationShell organizationName={membership.membership.organizationName} userLabel={profile?.full_name||data.user.email||"Signed-in user"}><section className="mx-auto max-w-4xl px-5 py-10 sm:px-8"><Link href="/projects" className="text-sm font-semibold text-slate-700 underline underline-offset-4">Back to projects</Link><div className="mt-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-9"><p className="text-sm font-semibold text-sky-700">New project</p><h1 className="mt-2 text-3xl font-semibold text-slate-950">Create a project</h1><p className="mt-2 text-sm leading-6 text-slate-600">Define the project foundation. You will become its Project Manager.</p><div className="mt-8"><CreateProjectForm/></div></div></section></ApplicationShell>}

@@ -79,7 +79,8 @@ test.describe.serial("first-user organization onboarding", () => {
     await page.getByRole("button", { name: "Create workspace" }).click();
 
     await expect(page).toHaveURL(/\/projects$/);
-    await expect(page.getByRole("heading", { name: "Your organization workspace is ready" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
+    await expect(page.getByText("No projects yet")).toBeVisible();
     await expect(page.getByText(organizationName, { exact: true }).first()).toBeVisible();
 
     const supabase = createLocalUserClient();
