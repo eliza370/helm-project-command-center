@@ -1,0 +1,1 @@
+export function getSafeAssumptionError(e:{code?:string}){if(e.code==="23514"||e.code==="22023")return"Review the assumption details, owner, dates, evidence, and lifecycle.";if(e.code==="42501")return"You do not have permission to change this assumption.";return"We could not save this assumption. Refresh and try again."}

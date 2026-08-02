@@ -1,0 +1,1 @@
+import type{SupabaseClient}from"@supabase/supabase-js";import type{Database}from"@/lib/supabase/database.types";export const getProjectAssumptions=(s:SupabaseClient<Database>,id:string)=>s.rpc("get_project_assumptions",{p_project_id:id});export const getEligibleAssumptionOwners=(s:SupabaseClient<Database>,id:string)=>s.rpc("get_eligible_assumption_owners",{p_project_id:id});

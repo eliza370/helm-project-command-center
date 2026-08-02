@@ -59,6 +59,13 @@ This document records approved decisions that resolve early product, domain, and
 * An Issue may optionally reference a same-project Realized Risk through an immutable typed foreign key. Issue creation remains manual, multiple Issues may share one origin, and no conversion RPC or automatic creation is introduced.
 * Assumptions, Dependencies, generic RAID tables, and polymorphic source identifiers remain deferred.
 
+### Project assumptions
+
+* Checkpoint 13 implements Assumptions as a separate third RAID entity with the established project-impact categories and qualitative Low, Medium, and High confidence.
+* Active and Under Validation are active states. Validated, Invalidated, and Retired are terminal, immutable, audited outcomes. Overdue validation is derived and is not an Expired status.
+* Validation and invalidation require current evidence and outcome notes; retirement requires outcome notes. Active organization Administrators and the actual assigned Project Manager manage Assumptions; ownership grants no mutation authority.
+* Risk, Issue, and Action creation or linkage, automatic conversion, generic RAID tables, polymorphic source fields, and Dependencies remain deferred.
+
 ### Organization ownership
 
 * Top-level entities such as projects and organization memberships store `organization_id` directly.

@@ -356,6 +356,8 @@ This rule is documented now and will be implemented with the later risk vertical
 
 An assumption is something believed to be true for planning purposes but not yet confirmed.
 
+Checkpoint 13 implements Assumptions as the third distinct RAID entity. Each records its planning rationale, validation method, impact if false, qualitative confidence, eligible validation owner, recorded and due dates, and current validation evidence. Active and Under Validation are active states. Validated, Invalidated, and Retired are terminal, immutable, audited outcomes requiring meaningful notes; validation and invalidation also require evidence. Ownership is read-only, overdue validation is derived rather than an Expired status, and permanent deletion is unsupported. Resulting Risk, Issue, or Action creation and linkage remain deferred.
+
 ### Fields
 
 * `id`
@@ -371,10 +373,11 @@ An assumption is something believed to be true for planning purposes but not yet
 
 ### Assumption Statuses
 
-* Unvalidated
+* Active
+* Under Validation
 * Validated
 * Invalidated
-* Expired
+* Retired
 
 ## Issues
 

@@ -390,6 +390,130 @@ export type Database = {
           },
         ]
       }
+      project_assumptions: {
+        Row: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        Insert: {
+          category: string
+          confidence: string
+          created_at?: string
+          created_by: string
+          description: string
+          id?: string
+          impact_if_false: string
+          invalidated_at?: string | null
+          invalidated_by?: string | null
+          outcome_notes?: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date?: string
+          retired_at?: string | null
+          retired_by?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+          validation_due_date: string
+          validation_evidence?: string | null
+          validation_method: string
+        }
+        Update: {
+          category?: string
+          confidence?: string
+          created_at?: string
+          created_by?: string
+          description?: string
+          id?: string
+          impact_if_false?: string
+          invalidated_at?: string | null
+          invalidated_by?: string | null
+          outcome_notes?: string | null
+          owner_membership_id?: string
+          planning_rationale?: string
+          project_id?: string
+          recorded_date?: string
+          retired_at?: string | null
+          retired_by?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          validated_at?: string | null
+          validated_by?: string | null
+          validation_due_date?: string
+          validation_evidence?: string | null
+          validation_method?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_assumptions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assumptions_invalidated_by_fkey"
+            columns: ["invalidated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assumptions_owner_membership_id_fkey"
+            columns: ["owner_membership_id"]
+            isOneToOne: false
+            referencedRelation: "project_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assumptions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assumptions_retired_by_fkey"
+            columns: ["retired_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_assumptions_validated_by_fkey"
+            columns: ["validated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_issues: {
         Row: {
           blocked_reason: string | null
@@ -884,6 +1008,54 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_project_assumption: {
+        Args: {
+          p_category: string
+          p_confidence: string
+          p_description: string
+          p_impact_if_false: string
+          p_owner_membership_id: string
+          p_planning_rationale: string
+          p_project_id: string
+          p_recorded_date: string
+          p_title: string
+          p_validation_due_date: string
+          p_validation_evidence?: string
+          p_validation_method: string
+        }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_assumptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       create_project_issue: {
         Args: {
           p_category: string
@@ -995,6 +1167,15 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_eligible_assumption_owners: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          full_name: string
+          membership_id: string
+          user_id: string
+        }[]
+      }
       get_eligible_deliverable_owners: {
         Args: { p_project_id: string }
         Returns: {
@@ -1064,6 +1245,43 @@ export type Database = {
           status: string
           title: string
           updated_at: string
+        }[]
+      }
+      get_project_assumptions: {
+        Args: { p_project_id: string }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string
+          invalidated_by: string
+          invalidated_by_name: string
+          outcome_notes: string
+          owner_access_level: string
+          owner_is_eligible: boolean
+          owner_membership_id: string
+          owner_name: string
+          owner_user_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string
+          retired_by: string
+          retired_by_name: string
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string
+          validated_by: string
+          validated_by_name: string
+          validation_due_date: string
+          validation_evidence: string
+          validation_method: string
         }[]
       }
       get_project_deliverables: {
@@ -1177,6 +1395,45 @@ export type Database = {
           user_id: string
         }[]
       }
+      invalidate_project_assumption: {
+        Args: {
+          p_assumption_id: string
+          p_outcome_notes: string
+          p_validation_evidence: string
+        }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_assumptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       manage_project_membership: {
         Args: {
           p_access_level: string
@@ -1216,6 +1473,41 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_issues"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      retire_project_assumption: {
+        Args: { p_assumption_id: string; p_outcome_notes: string }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_assumptions"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -1301,6 +1593,41 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      transition_project_assumption_active: {
+        Args: { p_assumption_id: string; p_target_status: string }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_assumptions"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -1412,6 +1739,53 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      update_project_assumption: {
+        Args: {
+          p_assumption_id: string
+          p_category: string
+          p_confidence: string
+          p_description: string
+          p_impact_if_false: string
+          p_owner_membership_id: string
+          p_planning_rationale: string
+          p_title: string
+          p_validation_due_date: string
+          p_validation_evidence: string
+          p_validation_method: string
+        }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_assumptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       update_project_issue: {
         Args: {
           p_category: string
@@ -1500,6 +1874,45 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_risks"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      validate_project_assumption: {
+        Args: {
+          p_assumption_id: string
+          p_outcome_notes: string
+          p_validation_evidence: string
+        }
+        Returns: {
+          category: string
+          confidence: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact_if_false: string
+          invalidated_at: string | null
+          invalidated_by: string | null
+          outcome_notes: string | null
+          owner_membership_id: string
+          planning_rationale: string
+          project_id: string
+          recorded_date: string
+          retired_at: string | null
+          retired_by: string | null
+          status: string
+          title: string
+          updated_at: string
+          validated_at: string | null
+          validated_by: string | null
+          validation_due_date: string
+          validation_evidence: string | null
+          validation_method: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_assumptions"
           isOneToOne: true
           isSetofReturn: false
         }
