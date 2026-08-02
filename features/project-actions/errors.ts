@@ -1,0 +1,1 @@
+export function getSafeActionError(error:{code?:string}){if(error.code==="23514"||error.code==="22023")return"Review the owner and action details and try again.";if(error.code==="42501")return"You do not have permission to change this action.";return"We could not save this action. Refresh and try again."}

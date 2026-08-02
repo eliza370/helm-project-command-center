@@ -27,6 +27,10 @@ An active Member may belong to the organization but does not automatically recei
 
 ## Project Access Levels
 
+### Project actions
+
+Active organization Administrators and the assigned Project Manager may create, edit, assign, transition, complete, and cancel active project actions. An active Project Member may move only an action owned by their own active project membership among Open, In Progress, and Blocked, and may complete it with meaningful completion notes. Ownership grants no planning-field, cancellation, reopening, or broader project-management permission. Stakeholder and Read Only access is read-only. Completed and Cancelled actions are terminal.
+
 Project membership has one of four access levels:
 
 * `Project Manager`

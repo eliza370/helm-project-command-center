@@ -435,6 +435,10 @@ A dependency is a relationship in which one item relies on another.
 
 ## Action Items
 
+Checkpoint 10 implements project actions with one eligible project-membership owner, a due date, priority, active working status, terminal completion or cancellation, and trusted creator/completion/cancellation audit fields. Completed and Cancelled actions are retained and immutable; permanent deletion and reopening are not supported in this checkpoint.
+
+Structured `source`, `source_type`, `source_id`, and generic related-record linkage are deliberately deferred until supported source entities exist. An unconstrained polymorphic identifier would not provide foreign-key, same-project, or organization-boundary integrity. Future slices should use typed foreign keys or integrity-preserving relation tables.
+
 An action item is a specific follow-up assigned to a person.
 
 ### Fields

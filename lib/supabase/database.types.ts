@@ -297,6 +297,99 @@ export type Database = {
         }
         Relationships: []
       }
+      project_actions: {
+        Row: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          completed_by: string | null
+          completion_notes: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: string
+          owner_membership_id: string
+          priority: string
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          completion_notes?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          due_date: string
+          id?: string
+          owner_membership_id: string
+          priority: string
+          project_id: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          completed_at?: string | null
+          completed_by?: string | null
+          completion_notes?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          due_date?: string
+          id?: string
+          owner_membership_id?: string
+          priority?: string
+          project_id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_actions_cancelled_by_fkey"
+            columns: ["cancelled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_actions_completed_by_fkey"
+            columns: ["completed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_actions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_actions_owner_membership_id_fkey"
+            columns: ["owner_membership_id"]
+            isOneToOne: false
+            referencedRelation: "project_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_actions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_members: {
         Row: {
           access_level: string
@@ -485,12 +578,55 @@ export type Database = {
         }
         Returns: string
       }
+      create_project_action: {
+        Args: {
+          p_description: string
+          p_due_date: string
+          p_owner_membership_id: string
+          p_priority: string
+          p_project_id: string
+          p_title: string
+        }
+        Returns: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          completed_by: string | null
+          completion_notes: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: string
+          owner_membership_id: string
+          priority: string
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_assignable_deliverable_milestones: {
         Args: { p_project_id: string }
         Returns: {
           id: string
           target_date: string
           title: string
+        }[]
+      }
+      get_eligible_action_owners: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          full_name: string
+          membership_id: string
+          user_id: string
         }[]
       }
       get_eligible_deliverable_owners: {
@@ -509,6 +645,33 @@ export type Database = {
           existing_access_level: string
           full_name: string
           user_id: string
+        }[]
+      }
+      get_project_actions: {
+        Args: { p_project_id: string }
+        Returns: {
+          cancelled_at: string
+          cancelled_by: string
+          cancelled_by_name: string
+          completed_at: string
+          completed_by: string
+          completed_by_name: string
+          completion_notes: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          description: string
+          due_date: string
+          id: string
+          owner_access_level: string
+          owner_membership_id: string
+          owner_name: string
+          owner_user_id: string
+          priority: string
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
         }[]
       }
       get_project_deliverables: {
@@ -607,6 +770,71 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "milestones"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      transition_project_action: {
+        Args: {
+          p_action_id: string
+          p_completion_notes?: string
+          p_target_status: string
+        }
+        Returns: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          completed_by: string | null
+          completion_notes: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: string
+          owner_membership_id: string
+          priority: string
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_project_action: {
+        Args: {
+          p_action_id: string
+          p_description: string
+          p_due_date: string
+          p_owner_membership_id: string
+          p_priority: string
+          p_title: string
+        }
+        Returns: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          completed_at: string | null
+          completed_by: string | null
+          completion_notes: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          due_date: string
+          id: string
+          owner_membership_id: string
+          priority: string
+          project_id: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_actions"
           isOneToOne: true
           isSetofReturn: false
         }
