@@ -415,7 +415,7 @@ Each Issue has one eligible Project Manager or Project Member owner, but ownersh
 
 ## Dependencies
 
-A dependency is a relationship in which one item relies on another.
+A Dependency is a required condition, input, commitment, service, decision, or outcome that a project relies on to progress or deliver successfully. Checkpoint 14 implements Dependencies as the fourth separate RAID entity; it does not use generic RAID or relationship tables.
 
 ### Fields
 
@@ -423,14 +423,20 @@ A dependency is a relationship in which one item relies on another.
 * `project_id`
 * `title`
 * `description`
-* `dependency_type`
-* `internal_or_external`
-* `dependent_item`
-* `required_item`
-* `owner_id`
+* `classification` (`Internal` or `External`)
+* `provider_name`
+* `required_outcome`
+* `required_for`
+* `impact_if_missed`
+* `management_plan`
+* `owner_membership_id`
+* `identified_date`
 * `needed_by_date`
 * `status`
-* `impact_if_missed`
+* `satisfaction_evidence`
+* `outcome_notes`
+* Trusted terminal actor and timestamp fields
+* `created_by`
 * `created_at`
 * `updated_at`
 
@@ -438,10 +444,17 @@ A dependency is a relationship in which one item relies on another.
 
 * Identified
 * Confirmed
-* On Track
+* In Progress
 * At Risk
-* Missed
-* Resolved
+* Satisfied
+* Failed
+* No Longer Required
+
+Identified, Confirmed, In Progress, and At Risk are active states. The three outcomes are terminal, immutable, audited states. Satisfaction requires evidence and outcome notes; failure and no-longer-required outcomes require notes. Overdue is derived from `needed_by_date`, not stored as a status.
+
+Only active organization Administrators and the actual assigned Project Manager may mutate Dependencies. Owners are limited to that actual Project Manager or active Project Members, but ownership grants no mutation permission. Historical ownership remains visible after deactivation and active records surface an Inactive owner attention reason.
+
+Cross-project links, dependency graphs, automatic propagation, polymorphic relationships, permanent deletion, reopening, and automatic creation of other governance records remain deferred.
 
 ## Action Items
 

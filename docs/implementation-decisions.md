@@ -57,13 +57,15 @@ This document records approved decisions that resolve early product, domain, and
 * Open, In Progress, and Blocked are active states. Resolved and Cancelled are terminal, immutable, audited states; reopening and permanent deletion are unsupported.
 * Active organization Administrators and the actual assigned Project Manager manage Issues. All other project roles, including an assigned owner, are read-only.
 * An Issue may optionally reference a same-project Realized Risk through an immutable typed foreign key. Issue creation remains manual, multiple Issues may share one origin, and no conversion RPC or automatic creation is introduced.
-* Assumptions, Dependencies, generic RAID tables, and polymorphic source identifiers remain deferred.
+* At Checkpoint 12, Assumptions, Dependencies, generic RAID tables, and polymorphic source identifiers remained deferred.
 
 ### Project assumptions
 
 * Checkpoint 13 implements Assumptions as a separate third RAID entity with the established project-impact categories and qualitative Low, Medium, and High confidence.
 * Active and Under Validation are active states. Validated, Invalidated, and Retired are terminal, immutable, audited outcomes. Overdue validation is derived and is not an Expired status.
 * Validation and invalidation require current evidence and outcome notes; retirement requires outcome notes. Active organization Administrators and the actual assigned Project Manager manage Assumptions; ownership grants no mutation authority.
+* Checkpoint 14 implements Dependencies as the fourth separate RAID entity with one `Internal` or `External` classification field. Plain constrained provider/outcome/required-for text preserves integrity without premature cross-project, vendor, graph, or polymorphic relationship infrastructure.
+* Dependency overdue state is derived with the shared 14-day soon window; `Missed` is not a lifecycle status. Satisfied, Failed, and No Longer Required are immutable audited terminal outcomes. Only Administrators and the actual assigned Project Manager mutate Dependencies; ownership grants no mutation authority.
 * Risk, Issue, and Action creation or linkage, automatic conversion, generic RAID tables, polymorphic source fields, and Dependencies remain deferred.
 
 ### Organization ownership

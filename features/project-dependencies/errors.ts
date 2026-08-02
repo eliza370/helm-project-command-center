@@ -1,0 +1,1 @@
+export function getSafeDependencyError(error:{code?:string}){return error.code==="23514"||error.code==="22023"?"Review the dependency details and try again.":error.code==="42501"?"You do not have permission to manage this dependency.":"The dependency could not be saved. Try again."}

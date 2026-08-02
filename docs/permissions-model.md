@@ -35,6 +35,8 @@ Active organization Administrators and the actual assigned Project Manager may c
 
 Active organization Administrators and the actual assigned Project Manager may create, edit, assign, transition, resolve, and cancel active project issues. Project Members, Stakeholders, and Read Only users are read-only, including an assigned issue owner. Resolved and Cancelled issues are terminal and immutable; no role may reopen or permanently delete an issue.
 
+Active organization Administrators and the actual assigned Project Manager may create, edit, assign, transition, satisfy, fail, or mark project Dependencies no longer required. Project Members, Stakeholders, and Read Only users are read-only, including an assigned Dependency owner. Ownership grants no mutation permission. Terminal Dependencies are immutable, cannot be reopened, and cannot be permanently deleted.
+
 ### Project assumptions
 
 Active organization Administrators and the actual assigned Project Manager may create, edit, assign, transition, validate, invalidate, and retire active project assumptions. Project Members, Stakeholders, and Read Only users are read-only, including an assigned validation owner. Validated, Invalidated, and Retired assumptions are terminal and immutable; no role may reopen or permanently delete an assumption.

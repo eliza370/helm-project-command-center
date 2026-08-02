@@ -1,0 +1,1 @@
+import type{SupabaseClient}from"@supabase/supabase-js";import type{Database}from"@/lib/supabase/database.types";export const getProjectDependencies=(s:SupabaseClient<Database>,id:string)=>s.rpc("get_project_dependencies",{p_project_id:id});export const getEligibleDependencyOwners=(s:SupabaseClient<Database>,id:string)=>s.rpc("get_eligible_dependency_owners",{p_project_id:id});
