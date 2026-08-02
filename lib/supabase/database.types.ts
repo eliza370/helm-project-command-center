@@ -390,6 +390,127 @@ export type Database = {
           },
         ]
       }
+      project_issues: {
+        Row: {
+          blocked_reason: string | null
+          cancellation_notes: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          category: string
+          created_at: string
+          created_by: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes: string | null
+          resolution_plan: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          blocked_reason?: string | null
+          cancellation_notes?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          category: string
+          created_at?: string
+          created_by: string
+          current_impact: string
+          description: string
+          id?: string
+          identified_date?: string
+          originating_risk_id?: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes?: string | null
+          resolution_plan: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity: string
+          status?: string
+          target_resolution_date: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          blocked_reason?: string | null
+          cancellation_notes?: string | null
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string
+          current_impact?: string
+          description?: string
+          id?: string
+          identified_date?: string
+          originating_risk_id?: string | null
+          owner_membership_id?: string
+          project_id?: string
+          resolution_notes?: string | null
+          resolution_plan?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          status?: string
+          target_resolution_date?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_issues_cancelled_by_fkey"
+            columns: ["cancelled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_issues_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_issues_origin_project_fkey"
+            columns: ["originating_risk_id", "project_id"]
+            isOneToOne: false
+            referencedRelation: "project_risks"
+            referencedColumns: ["id", "project_id"]
+          },
+          {
+            foreignKeyName: "project_issues_owner_membership_id_fkey"
+            columns: ["owner_membership_id"]
+            isOneToOne: false
+            referencedRelation: "project_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_issues_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_issues_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_members: {
         Row: {
           access_level: string
@@ -663,6 +784,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cancel_project_issue: {
+        Args: { p_cancellation_notes: string; p_issue_id: string }
+        Returns: {
+          blocked_reason: string | null
+          cancellation_notes: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          category: string
+          created_at: string
+          created_by: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes: string | null
+          resolution_plan: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_issues"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       complete_onboarding: {
         Args: {
           p_avatar_url?: string
@@ -725,6 +880,52 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_project_issue: {
+        Args: {
+          p_category: string
+          p_current_impact: string
+          p_description: string
+          p_identified_date: string
+          p_originating_risk_id?: string
+          p_owner_membership_id: string
+          p_project_id: string
+          p_resolution_plan: string
+          p_severity: string
+          p_target_resolution_date: string
+          p_title: string
+        }
+        Returns: {
+          blocked_reason: string | null
+          cancellation_notes: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          category: string
+          created_at: string
+          created_by: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes: string | null
+          resolution_plan: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_issues"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -803,6 +1004,23 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_eligible_issue_origins: {
+        Args: { p_project_id: string }
+        Returns: {
+          realized_at: string
+          risk_id: string
+          title: string
+        }[]
+      }
+      get_eligible_issue_owners: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          full_name: string
+          membership_id: string
+          user_id: string
+        }[]
+      }
       get_eligible_project_members: {
         Args: { p_project_id: string }
         Returns: {
@@ -873,6 +1091,44 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_project_issues: {
+        Args: { p_project_id: string }
+        Returns: {
+          blocked_reason: string
+          cancellation_notes: string
+          cancelled_at: string
+          cancelled_by: string
+          cancelled_by_name: string
+          category: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string
+          originating_risk_realized_at: string
+          originating_risk_status: string
+          originating_risk_title: string
+          owner_access_level: string
+          owner_is_eligible: boolean
+          owner_membership_id: string
+          owner_name: string
+          owner_user_id: string
+          project_id: string
+          resolution_notes: string
+          resolution_plan: string
+          resolved_at: string
+          resolved_by: string
+          resolved_by_name: string
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }[]
+      }
       get_project_risks: {
         Args: { p_project_id: string }
         Returns: {
@@ -929,6 +1185,40 @@ export type Database = {
           p_user_id: string
         }
         Returns: string
+      }
+      resolve_project_issue: {
+        Args: { p_issue_id: string; p_resolution_notes: string }
+        Returns: {
+          blocked_reason: string | null
+          cancellation_notes: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          category: string
+          created_at: string
+          created_by: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes: string | null
+          resolution_plan: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_issues"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       transition_deliverable: {
         Args: {
@@ -1015,6 +1305,44 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      transition_project_issue_active: {
+        Args: {
+          p_blocked_reason?: string
+          p_issue_id: string
+          p_target_status: string
+        }
+        Returns: {
+          blocked_reason: string | null
+          cancellation_notes: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          category: string
+          created_at: string
+          created_by: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes: string | null
+          resolution_plan: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_issues"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       transition_project_risk: {
         Args: { p_notes?: string; p_risk_id: string; p_target_status: string }
         Returns: {
@@ -1080,6 +1408,50 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_project_issue: {
+        Args: {
+          p_category: string
+          p_current_impact: string
+          p_description: string
+          p_issue_id: string
+          p_owner_membership_id: string
+          p_resolution_plan: string
+          p_severity: string
+          p_target_resolution_date: string
+          p_title: string
+        }
+        Returns: {
+          blocked_reason: string | null
+          cancellation_notes: string | null
+          cancelled_at: string | null
+          cancelled_by: string | null
+          category: string
+          created_at: string
+          created_by: string
+          current_impact: string
+          description: string
+          id: string
+          identified_date: string
+          originating_risk_id: string | null
+          owner_membership_id: string
+          project_id: string
+          resolution_notes: string | null
+          resolution_plan: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          status: string
+          target_resolution_date: string
+          title: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_issues"
           isOneToOne: true
           isSetofReturn: false
         }

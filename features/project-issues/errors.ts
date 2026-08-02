@@ -1,0 +1,1 @@
+export function getSafeIssueError(error:{code?:string}){if(error.code==="23514"||error.code==="22023")return"Review the issue details, owner, dates, and originating risk.";if(error.code==="42501")return"You do not have permission to change this issue.";return"We could not save this issue. Refresh and try again."}

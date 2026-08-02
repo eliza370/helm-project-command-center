@@ -380,6 +380,10 @@ An assumption is something believed to be true for planning purposes but not yet
 
 An issue is a problem that has already occurred and requires resolution.
 
+Checkpoint 12 implements Issues as a separate RAID entity. Issues use the shared Scope, Schedule, Cost, Resources, Technical, Quality, Supplier, Compliance, Operational, and Other categories, with qualitative Low, Medium, High, and Critical severity. Open, In Progress, and Blocked are active; Resolved and Cancelled are terminal and immutable. Blocked requires a reason, while resolution and cancellation require meaningful notes and trusted actor/timestamp audit fields.
+
+Each Issue has one eligible Project Manager or Project Member owner, but ownership grants no mutation authority. An Issue may optionally and immutably reference a Realized Risk in the same project through a typed foreign key. Managers create Issues deliberately; realization never creates one automatically, and multiple Issues may reference one Realized Risk. Assumptions, Dependencies, generic RAID infrastructure, and polymorphic source links remain deferred.
+
 ### Fields
 
 * `id`
@@ -401,11 +405,10 @@ An issue is a problem that has already occurred and requires resolution.
 ### Issue Statuses
 
 * Open
-* Investigating
 * In Progress
 * Blocked
 * Resolved
-* Closed
+* Cancelled
 
 ## Dependencies
 

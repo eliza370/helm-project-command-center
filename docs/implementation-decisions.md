@@ -50,6 +50,15 @@ This document records approved decisions that resolve early product, domain, and
 * Helm's initial presentation bands are Low (1–4), Moderate (5–9), High (10–16), and Critical (17–25); these are product presentation bands, not universal standards.
 * The first RAID slice implements only Threat and Opportunity risks. Issues, assumptions, dependencies, issue linkage, and generic RAID infrastructure remain deferred as distinct slices.
 
+### Project issues
+
+* Checkpoint 12 implements Issues as a distinct second section of the RAID register and a separate `project_issues` entity.
+* Issue severity is qualitative: Low, Medium, High, or Critical. Categories reuse the established project-impact taxonomy.
+* Open, In Progress, and Blocked are active states. Resolved and Cancelled are terminal, immutable, audited states; reopening and permanent deletion are unsupported.
+* Active organization Administrators and the actual assigned Project Manager manage Issues. All other project roles, including an assigned owner, are read-only.
+* An Issue may optionally reference a same-project Realized Risk through an immutable typed foreign key. Issue creation remains manual, multiple Issues may share one origin, and no conversion RPC or automatic creation is introduced.
+* Assumptions, Dependencies, generic RAID tables, and polymorphic source identifiers remain deferred.
+
 ### Organization ownership
 
 * Top-level entities such as projects and organization memberships store `organization_id` directly.
