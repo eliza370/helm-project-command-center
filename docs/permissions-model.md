@@ -27,6 +27,10 @@ An active Member may belong to the organization but does not automatically recei
 
 ## Project Access Levels
 
+### Project risks
+
+Active organization Administrators and the actual assigned Project Manager may create, edit, assess, assign, transition, realize, and close active project risks. Project Members, Stakeholders, and Read Only users are read-only, including an assigned risk owner. Realized and Closed risks are terminal and no role may permanently delete a risk.
+
 ### Project actions
 
 Active organization Administrators and the assigned Project Manager may create, edit, assign, transition, complete, and cancel active project actions. An active Project Member may move only an action owned by their own active project membership among Open, In Progress, and Blocked, and may complete it with meaningful completion notes. Ownership grants no planning-field, cancellation, reopening, or broader project-management permission. Stakeholder and Read Only access is read-only. Completed and Cancelled actions are terminal.

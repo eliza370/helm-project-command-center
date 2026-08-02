@@ -293,6 +293,10 @@ A deliverable is a tangible project output.
 
 ## Risks
 
+Checkpoint 11 implements risks as the first RAID slice. Risks are classified as Threats or Opportunities and use constrained categories and type-compatible response strategies. Probability and impact remain 1–5; `risk_score` is a database-generated product, presented initially as Low (1–4), Moderate (5–9), High (10–16), or Critical (17–25) exposure. The review date is the next planned risk-review date.
+
+Implemented statuses are Identified, Monitoring, Mitigating, Realized, and Closed. Realized and Closed are terminal, immutable, audited states requiring meaningful notes. Risk ownership is accountable project membership but grants no mutation permission. Issues, assumptions, dependencies, automatic issue creation, risk-to-issue linkage, and generic RAID or polymorphic infrastructure remain deferred as distinct later slices.
+
 A risk is an uncertain future event that could affect the project.
 
 A risk is not an issue. Once the event has occurred, it should be managed as an issue.

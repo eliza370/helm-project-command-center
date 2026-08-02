@@ -441,6 +441,123 @@ export type Database = {
           },
         ]
       }
+      project_risks: {
+        Row: {
+          category: string
+          closed_at: string | null
+          closed_by: string | null
+          closure_notes: string | null
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact: number
+          owner_membership_id: string
+          probability: number
+          project_id: string
+          realization_notes: string | null
+          realized_at: string | null
+          realized_by: string | null
+          response_plan: string
+          response_strategy: string
+          review_date: string
+          risk_score: number | null
+          risk_type: string
+          status: string
+          title: string
+          trigger: string | null
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          closed_at?: string | null
+          closed_by?: string | null
+          closure_notes?: string | null
+          created_at?: string
+          created_by: string
+          description: string
+          id?: string
+          impact: number
+          owner_membership_id: string
+          probability: number
+          project_id: string
+          realization_notes?: string | null
+          realized_at?: string | null
+          realized_by?: string | null
+          response_plan: string
+          response_strategy: string
+          review_date: string
+          risk_score?: number | null
+          risk_type: string
+          status?: string
+          title: string
+          trigger?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          closed_at?: string | null
+          closed_by?: string | null
+          closure_notes?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string
+          id?: string
+          impact?: number
+          owner_membership_id?: string
+          probability?: number
+          project_id?: string
+          realization_notes?: string | null
+          realized_at?: string | null
+          realized_by?: string | null
+          response_plan?: string
+          response_strategy?: string
+          review_date?: string
+          risk_score?: number | null
+          risk_type?: string
+          status?: string
+          title?: string
+          trigger?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_risks_closed_by_fkey"
+            columns: ["closed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_risks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_risks_owner_membership_id_fkey"
+            columns: ["owner_membership_id"]
+            isOneToOne: false
+            referencedRelation: "project_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_risks_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_risks_realized_by_fkey"
+            columns: ["realized_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           actual_completion_date: string | null
@@ -612,6 +729,54 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_project_risk: {
+        Args: {
+          p_category: string
+          p_description: string
+          p_impact: number
+          p_owner_membership_id: string
+          p_probability: number
+          p_project_id: string
+          p_response_plan: string
+          p_response_strategy: string
+          p_review_date: string
+          p_risk_type: string
+          p_title: string
+          p_trigger: string
+        }
+        Returns: {
+          category: string
+          closed_at: string | null
+          closed_by: string | null
+          closure_notes: string | null
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact: number
+          owner_membership_id: string
+          probability: number
+          project_id: string
+          realization_notes: string | null
+          realized_at: string | null
+          realized_by: string | null
+          response_plan: string
+          response_strategy: string
+          review_date: string
+          risk_score: number | null
+          risk_type: string
+          status: string
+          title: string
+          trigger: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_risks"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_assignable_deliverable_milestones: {
         Args: { p_project_id: string }
         Returns: {
@@ -644,6 +809,15 @@ export type Database = {
           email: string
           existing_access_level: string
           full_name: string
+          user_id: string
+        }[]
+      }
+      get_eligible_risk_owners: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          full_name: string
+          membership_id: string
           user_id: string
         }[]
       }
@@ -696,6 +870,42 @@ export type Database = {
           status: string
           submitted_at: string
           title: string
+          updated_at: string
+        }[]
+      }
+      get_project_risks: {
+        Args: { p_project_id: string }
+        Returns: {
+          category: string
+          closed_at: string
+          closed_by: string
+          closed_by_name: string
+          closure_notes: string
+          created_at: string
+          created_by: string
+          created_by_name: string
+          description: string
+          id: string
+          impact: number
+          owner_access_level: string
+          owner_is_eligible: boolean
+          owner_membership_id: string
+          owner_name: string
+          owner_user_id: string
+          probability: number
+          project_id: string
+          realization_notes: string
+          realized_at: string
+          realized_by: string
+          realized_by_name: string
+          response_plan: string
+          response_strategy: string
+          review_date: string
+          risk_score: number
+          risk_type: string
+          status: string
+          title: string
+          trigger: string
           updated_at: string
         }[]
       }
@@ -805,6 +1015,41 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      transition_project_risk: {
+        Args: { p_notes?: string; p_risk_id: string; p_target_status: string }
+        Returns: {
+          category: string
+          closed_at: string | null
+          closed_by: string | null
+          closure_notes: string | null
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact: number
+          owner_membership_id: string
+          probability: number
+          project_id: string
+          realization_notes: string | null
+          realized_at: string | null
+          realized_by: string | null
+          response_plan: string
+          response_strategy: string
+          review_date: string
+          risk_score: number | null
+          risk_type: string
+          status: string
+          title: string
+          trigger: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_risks"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       update_project_action: {
         Args: {
           p_action_id: string
@@ -835,6 +1080,54 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_actions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_project_risk: {
+        Args: {
+          p_category: string
+          p_description: string
+          p_impact: number
+          p_owner_membership_id: string
+          p_probability: number
+          p_response_plan: string
+          p_response_strategy: string
+          p_review_date: string
+          p_risk_id: string
+          p_risk_type: string
+          p_title: string
+          p_trigger: string
+        }
+        Returns: {
+          category: string
+          closed_at: string | null
+          closed_by: string | null
+          closure_notes: string | null
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          impact: number
+          owner_membership_id: string
+          probability: number
+          project_id: string
+          realization_notes: string | null
+          realized_at: string | null
+          realized_by: string | null
+          response_plan: string
+          response_strategy: string
+          review_date: string
+          risk_score: number | null
+          risk_type: string
+          status: string
+          title: string
+          trigger: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_risks"
           isOneToOne: true
           isSetofReturn: false
         }

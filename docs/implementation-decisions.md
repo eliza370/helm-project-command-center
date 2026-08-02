@@ -46,7 +46,9 @@ This document records approved decisions that resolve early product, domain, and
 
 * Probability and impact each use integer scales from 1 to 5.
 * Risk score is `probability * impact`, producing a range from 1 to 25.
-* Implementation is deferred to the risk vertical slice.
+* Checkpoint 11 implements the score as a PostgreSQL generated stored column that is never accepted from client input.
+* Helm's initial presentation bands are Low (1–4), Moderate (5–9), High (10–16), and Critical (17–25); these are product presentation bands, not universal standards.
+* The first RAID slice implements only Threat and Opportunity risks. Issues, assumptions, dependencies, issue linkage, and generic RAID infrastructure remain deferred as distinct slices.
 
 ### Organization ownership
 

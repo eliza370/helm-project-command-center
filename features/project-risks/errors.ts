@@ -1,0 +1,1 @@
+export function getSafeRiskError(e:{code?:string}){if(e.code==="23514"||e.code==="22023")return"Review the assessment, owner, strategy, and lifecycle details.";if(e.code==="42501")return"You do not have permission to change this risk.";return"We could not save this risk. Refresh and try again."}

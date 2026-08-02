@@ -1,0 +1,1 @@
+import type{SupabaseClient}from"@supabase/supabase-js";import type{Database}from"@/lib/supabase/database.types";export const getProjectRisks=(s:SupabaseClient<Database>,id:string)=>s.rpc("get_project_risks",{p_project_id:id});export const getEligibleRiskOwners=(s:SupabaseClient<Database>,id:string)=>s.rpc("get_eligible_risk_owners",{p_project_id:id});
