@@ -101,6 +101,15 @@ The first vertical slice consists only of:
 
 No RAID, milestone, deliverable, action, decision, status-report, change-control, closure, comment, generic approval, invitation, or advanced provisioning implementation belongs in this slice.
 
+### Decision Log
+
+* Decisions record important choices after they have been made and have no status or approval lifecycle.
+* The decision-maker is a durable text snapshot and need not be a Helm user; it grants no authorization.
+* Only an active organization Administrator or actual assigned Project Manager may record or correct a Decision. Other authorized project roles are read-only, and no delete capability exists.
+* A correction requires explicit confirmation and a meaningful reason, and preserves the latest trusted corrector and timestamp. A changed project choice is a new Decision.
+* Full revision history, approvals, voting, comments, attachments, reminders, and notifications remain deferred.
+* Generic related-record fields are deferred until an integrity-preserving model exists. Follow-up Actions are manual and Decision operations never mutate other governance records.
+
 ## Deferred Design Work
 
 Later vertical slices must define:

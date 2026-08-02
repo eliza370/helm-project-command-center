@@ -499,7 +499,7 @@ An action item is a specific follow-up assigned to a person.
 
 ## Decisions
 
-A decision records an important project choice and its context.
+A Decision is an authoritative record of an important project choice after it has been made. It is not a pending approval, vote, discussion, task, or mutable workflow item. Decisions have no status lifecycle; Helm derives `Recorded` and `Corrected` display labels from trusted correction audit fields.
 
 ### Fields
 
@@ -508,16 +508,23 @@ A decision records an important project choice and its context.
 * `title`
 * `decision`
 * `decision_date`
-* `decision_maker`
+* `decision_maker_name`
 * `context`
 * `alternatives_considered`
 * `rationale`
 * `consequences`
-* `related_record_type`
-* `related_record_id`
+* `effective_date` (optional)
+* `follow_up_notes` (optional)
+* `correction_reason` (optional until corrected)
+* `last_corrected_by` (optional until corrected)
+* `last_corrected_at` (optional until corrected)
 * `created_by`
 * `created_at`
 * `updated_at`
+
+`decision_maker_name` is a durable text snapshot because a legitimate decision-maker may be a person or body without a Helm account. Being named grants no permission. Corrections fix inaccurate records and retain the latest authoritative values plus the latest trusted correction reason, actor, and timestamp. A changed project choice is recorded as a new Decision; full revision history is deferred.
+
+Generic related-record fields are deferred because weak polymorphic identifiers would not preserve referential or same-project integrity. Follow-up work is created manually as an Action; recording or correcting a Decision never mutates another governance record.
 
 ## Change Requests
 

@@ -113,6 +113,12 @@ Protected operations must:
 
 Protected tables must use Row Level Security. Select, insert, update, and delete rules must be reviewed separately. Negative tests must cover unauthenticated access, cross-organization access, non-member project access, and attempts by restricted project roles to edit, close, or cancel projects.
 
+## Decision Log Permissions
+
+Active organization Administrators and the project's actual assigned Project Manager may record and correct Decisions. Active Project Members, Stakeholders, and Read Only users with project access may read Decisions but cannot mutate them. A membership merely labelled Project Manager does not qualify unless its user is the assigned manager. Decision-maker and creator attribution grant no additional access. Nobody may permanently delete a Decision.
+
+Reads use project-access Row Level Security. Writes use focused database functions that derive the actor from `auth.uid()` and independently enforce manager authorization; authenticated users have no direct insert, update, or delete table grant.
+
 ## Deferred Permissions
 
-Permissions for RAID records, milestones, deliverables, actions, decisions, status reports, change requests, closure items, feature-specific approvals, and other later modules will be defined with those vertical slices. No generic comment or approval permission is introduced now.
+Permissions for status reports, change requests, closure items, feature-specific approvals, and other later modules will be defined with those vertical slices. No generic comment or approval permission is introduced now.

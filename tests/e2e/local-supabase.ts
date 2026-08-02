@@ -3,6 +3,8 @@
 
 
 
+
+
 import { createClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 export function createLocalUserClient() {
@@ -25,7 +27,7 @@ export async function deleteLocalTestUsers(userIds: string[]) {
   }
 
   const ids = userIds.map((userId) => `'${userId}'`).join(",");
-  const sql = `begin; create temp table helm_e2e_users(id uuid primary key) on commit drop; insert into helm_e2e_users values ${userIds.map((userId) => `('${userId}')`).join(",")}; create temp table helm_e2e_orgs on commit drop as select id from public.organizations where created_by in (select id from helm_e2e_users); create temp table helm_e2e_projects on commit drop as select id from public.projects where organization_id in (select id from helm_e2e_orgs); delete from public.project_dependencies where project_id in (select id from helm_e2e_projects); delete from public.project_assumptions where project_id in (select id from helm_e2e_projects); delete from public.project_issues where project_id in (select id from helm_e2e_projects); delete from public.project_risks where project_id in (select id from helm_e2e_projects); delete from public.project_actions where project_id in (select id from helm_e2e_projects); delete from public.deliverables where project_id in (select id from helm_e2e_projects); delete from public.milestones where project_id in (select id from helm_e2e_projects); delete from public.project_members where project_id in (select id from helm_e2e_projects) or user_id in (select id from helm_e2e_users); delete from public.projects where id in (select id from helm_e2e_projects); delete from public.organization_members where user_id in (select id from helm_e2e_users); delete from public.organizations where id in (select id from helm_e2e_orgs); delete from public.profiles where id in (select id from helm_e2e_users); delete from auth.users where id in (${ids}); commit;`;
+  const sql = `begin; create temp table helm_e2e_users(id uuid primary key) on commit drop; insert into helm_e2e_users values ${userIds.map((userId) => `('${userId}')`).join(",")}; create temp table helm_e2e_orgs on commit drop as select id from public.organizations where created_by in (select id from helm_e2e_users); create temp table helm_e2e_projects on commit drop as select id from public.projects where organization_id in (select id from helm_e2e_orgs); delete from public.project_decisions where project_id in (select id from helm_e2e_projects); delete from public.project_dependencies where project_id in (select id from helm_e2e_projects); delete from public.project_assumptions where project_id in (select id from helm_e2e_projects); delete from public.project_issues where project_id in (select id from helm_e2e_projects); delete from public.project_risks where project_id in (select id from helm_e2e_projects); delete from public.project_actions where project_id in (select id from helm_e2e_projects); delete from public.deliverables where project_id in (select id from helm_e2e_projects); delete from public.milestones where project_id in (select id from helm_e2e_projects); delete from public.project_members where project_id in (select id from helm_e2e_projects) or user_id in (select id from helm_e2e_users); delete from public.projects where id in (select id from helm_e2e_projects); delete from public.organization_members where user_id in (select id from helm_e2e_users); delete from public.organizations where id in (select id from helm_e2e_orgs); delete from public.profiles where id in (select id from helm_e2e_users); delete from auth.users where id in (${ids}); commit;`;
 
   execFileSync(
     "docker",
@@ -46,11 +48,12 @@ export async function deleteLocalTestUsers(userIds: string[]) {
   );
 }
 
-export function provisionLocalProjectMember(input:{userId:string;email:string;fullName:string;organizationId:string;projectId?:string}){
+export function provisionLocalProjectMember(input:{userId:string;email:string;fullName:string;organizationId:string;projectId?:string;accessLevel?:"Project Manager"|"Project Member"|"Stakeholder"|"Read Only"}){
   const uuid=/^[0-9a-f-]{36}$/i;if(!uuid.test(input.userId)||!uuid.test(input.organizationId)||(input.projectId&&!uuid.test(input.projectId)))throw new Error("Invalid fixture identifier.");
   const safe=(value:string)=>value.replace(/'/g,"''");
-  const projectMembership=input.projectId?`insert into public.project_members(project_id,user_id,project_role,access_level) values ('${input.projectId}','${input.userId}','Delivery team','Project Member');`:"";
+  const accessLevel=input.accessLevel??"Project Member";const projectMembership=input.projectId?`insert into public.project_members(project_id,user_id,project_role,access_level) values ('${input.projectId}','${input.userId}','Delivery team','${accessLevel}');`:"";
   const sql=`begin; insert into public.profiles(id,email,full_name) values ('${input.userId}','${safe(input.email)}','${safe(input.fullName)}'); insert into public.organization_members(organization_id,user_id,role,status) values ('${input.organizationId}','${input.userId}','Member','Active'); ${projectMembership} commit;`;
   execFileSync("docker",["exec","supabase_db_helm-project-command-center","psql","-U","postgres","-d","postgres","-v","ON_ERROR_STOP=1","-c",sql],{stdio:"ignore"});
 }
 export function deactivateLocalOrganizationMember(userId:string,organizationId:string){const uuidPattern=/^[0-9a-f-]{36}$/i;if(!uuidPattern.test(userId)||!uuidPattern.test(organizationId))throw new Error("Refusing an invalid local membership update.");const sql=`update public.organization_members set status='Inactive' where user_id='${userId}' and organization_id='${organizationId}';`;execFileSync("docker",["exec","supabase_db_helm-project-command-center","psql","-U","postgres","-d","postgres","-v","ON_ERROR_STOP=1","-c",sql],{stdio:"ignore"});}
+export function assignLocalProjectManager(userId:string,projectId:string){const uuidPattern=/^[0-9a-f-]{36}$/i;if(!uuidPattern.test(userId)||!uuidPattern.test(projectId))throw new Error("Refusing an invalid local manager assignment.");execFileSync("docker",["exec","supabase_db_helm-project-command-center","psql","-U","postgres","-d","postgres","-v","ON_ERROR_STOP=1","-c",`set session_replication_role=replica; update public.projects set project_manager_id='${userId}' where id='${projectId}'; set session_replication_role=origin;`],{stdio:"ignore"});}

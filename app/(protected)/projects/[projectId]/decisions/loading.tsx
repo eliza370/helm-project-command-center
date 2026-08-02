@@ -1,0 +1,1 @@
+export default function DecisionsLoading(){return <main className="mx-auto max-w-6xl px-5 py-10 sm:px-8"><p role="status" className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-700">Loading the Decision Log…</p></main>}

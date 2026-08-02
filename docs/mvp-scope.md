@@ -133,7 +133,7 @@ Users should be able to record:
 * Alternatives considered
 * Reason for the decision
 * Consequences
-* Related records
+* Related records (deferred until an integrity-preserving relationship design is implemented)
 
 ### 7. Status Reporting
 
