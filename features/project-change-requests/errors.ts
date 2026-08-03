@@ -1,0 +1,1 @@
+export function getSafeChangeError(e:{code?:string}){if(e.code==="22023"||e.code==="23514")return"Review the Change Request details and try again.";if(e.code==="42501")return"You do not have permission to change this Change Request.";return"The Change Request could not be saved. Try again."}

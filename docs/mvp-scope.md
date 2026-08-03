@@ -277,3 +277,7 @@ The MVP is successful when a project manager can:
 # Project Status Reporting
 
 The MVP includes protected Status Report registers, manager-authored drafts, deliberate publication, independent report health, narrative sections, and immutable publication-time project/source snapshots. Approval workflows, corrections and supersession, recall or unpublish, deletion or archive, comments, attachments, notifications, distribution, exports, AI narratives, templates, charts, custom sections, portfolio reporting, and generic source relationships are excluded.
+
+# Project Change Control
+
+The MVP includes private manager-authored Change Request drafts, formal submission with a complete six-dimension impact assessment, approval or rejection, implementation planning and tracking, withdrawal before decision, and immutable Implemented, Not Implemented, Rejected, and Withdrawn outcomes. Change Control never automatically mutates another project record. Generic approvals, multi-stage approval, voting, comments, attachments, notifications, source links, baseline comparison, financial accounting, reopening, deletion, archive, and Status Report integration are excluded.

@@ -528,7 +528,7 @@ Generic related-record fields are deferred because weak polymorphic identifiers 
 
 ## Change Requests
 
-A change request proposes a controlled modification to the project.
+A Change Request is a formal, auditable proposal for a controlled project modification. Drafts are private to managers. Submission attests a complete structured impact assessment and freezes the governance proposal. Approval never changes source project records; it permits only implementation planning and outcome tracking.
 
 ### Fields
 
@@ -537,17 +537,17 @@ A change request proposes a controlled modification to the project.
 * `title`
 * `description`
 * `reason`
-* `requested_by`
-* `submitted_at`
+* `requester_name` (durable text; grants no permission)
+* `requested_date`
 * `scope_impact`
 * `schedule_impact`
 * `budget_impact`
 * `resource_impact`
+* `quality_impact`
 * `risk_impact`
 * `recommendation`
-* `decision`
-* `decision_maker`
-* `decision_date`
+* Implementation owner and target date
+* Trusted creator, editor, submitter, decision, withdrawal, implementation-start, and outcome audit fields
 * `status`
 * `created_at`
 * `updated_at`
@@ -556,12 +556,14 @@ A change request proposes a controlled modification to the project.
 
 * Draft
 * Submitted
-* Under Review
 * Approved
 * Rejected
-* Deferred
+* Withdrawn
+* In Implementation
 * Implemented
-* Cancelled
+* Not Implemented
+
+Rejected, Withdrawn, Implemented, and Not Implemented are terminal and immutable. An Approved or In Implementation request may conclude as Not Implemented with meaningful outcome notes. Creator, requester, decision actor, and implementation ownership grant no mutation permission. Change Control does not automatically mutate Projects or any other governance record. Reopening, deletion, archive, generic approval infrastructure, comments, attachments, notifications, source links, baseline comparison, and Status Report integration are deferred.
 
 ## Project Health Updates
 

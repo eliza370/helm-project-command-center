@@ -514,6 +514,200 @@ export type Database = {
           },
         ]
       }
+      project_change_requests: {
+        Row: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        Insert: {
+          budget_impact?: string | null
+          category: string
+          created_at?: string
+          created_by: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          description: string
+          id?: string
+          implementation_outcome_notes?: string | null
+          implementation_owner_membership_id?: string | null
+          implementation_plan_updated_at?: string | null
+          implementation_plan_updated_by?: string | null
+          implementation_started_at?: string | null
+          implementation_started_by?: string | null
+          implementation_target_date?: string | null
+          last_edited_at?: string
+          last_edited_by: string
+          outcome_recorded_at?: string | null
+          outcome_recorded_by?: string | null
+          project_id: string
+          quality_impact?: string | null
+          reason: string
+          recommendation?: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact?: string | null
+          risk_impact?: string | null
+          schedule_impact?: string | null
+          scope_impact?: string | null
+          status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          title: string
+          updated_at?: string
+          withdrawal_notes?: string | null
+          withdrawn_at?: string | null
+          withdrawn_by?: string | null
+        }
+        Update: {
+          budget_impact?: string | null
+          category?: string
+          created_at?: string
+          created_by?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+          description?: string
+          id?: string
+          implementation_outcome_notes?: string | null
+          implementation_owner_membership_id?: string | null
+          implementation_plan_updated_at?: string | null
+          implementation_plan_updated_by?: string | null
+          implementation_started_at?: string | null
+          implementation_started_by?: string | null
+          implementation_target_date?: string | null
+          last_edited_at?: string
+          last_edited_by?: string
+          outcome_recorded_at?: string | null
+          outcome_recorded_by?: string | null
+          project_id?: string
+          quality_impact?: string | null
+          reason?: string
+          recommendation?: string | null
+          requested_date?: string
+          requester_name?: string
+          resource_impact?: string | null
+          risk_impact?: string | null
+          schedule_impact?: string | null
+          scope_impact?: string | null
+          status?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          title?: string
+          updated_at?: string
+          withdrawal_notes?: string | null
+          withdrawn_at?: string | null
+          withdrawn_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_change_requests_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_decided_by_fkey"
+            columns: ["decided_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_implementation_owner_membership_id_fkey"
+            columns: ["implementation_owner_membership_id"]
+            isOneToOne: false
+            referencedRelation: "project_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_implementation_plan_updated_by_fkey"
+            columns: ["implementation_plan_updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_implementation_started_by_fkey"
+            columns: ["implementation_started_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_last_edited_by_fkey"
+            columns: ["last_edited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_outcome_recorded_by_fkey"
+            columns: ["outcome_recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_change_requests_withdrawn_by_fkey"
+            columns: ["withdrawn_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_decisions: {
         Row: {
           alternatives_considered: string
@@ -1251,6 +1445,61 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      approve_project_change_request: {
+        Args: {
+          p_confirm: boolean
+          p_id: string
+          p_notes: string
+          p_owner: string
+          p_target: string
+        }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       cancel_project_issue: {
         Args: { p_cancellation_notes: string; p_issue_id: string }
         Returns: {
@@ -1294,6 +1543,55 @@ export type Database = {
           p_organization_name: string
         }
         Returns: string
+      }
+      complete_project_change_request: {
+        Args: { p_confirm: boolean; p_id: string; p_notes: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       conclude_project_dependency: {
         Args: {
@@ -1478,6 +1776,70 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_assumptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      create_project_change_request: {
+        Args: {
+          p_budget: string
+          p_category: string
+          p_description: string
+          p_project_id: string
+          p_quality: string
+          p_reason: string
+          p_recommendation: string
+          p_requested_date: string
+          p_requester_name: string
+          p_resource: string
+          p_risk: string
+          p_schedule: string
+          p_scope: string
+          p_title: string
+        }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -1778,6 +2140,15 @@ export type Database = {
         }[]
       }
       get_eligible_assumption_owners: {
+        Args: { p_project_id: string }
+        Returns: {
+          access_level: string
+          full_name: string
+          membership_id: string
+          user_id: string
+        }[]
+      }
+      get_eligible_change_owners: {
         Args: { p_project_id: string }
         Returns: {
           access_level: string
@@ -2100,6 +2471,55 @@ export type Database = {
         }
         Returns: string
       }
+      mark_project_change_request_not_implemented: {
+        Args: { p_confirm: boolean; p_id: string; p_notes: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       mark_project_dependency_no_longer_required: {
         Args: { p_dependency_id: string; p_outcome_notes: string }
         Returns: {
@@ -2174,6 +2594,55 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_status_reports"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      reject_project_change_request: {
+        Args: { p_confirm: boolean; p_id: string; p_notes: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2283,6 +2752,104 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_dependencies"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      start_change_request_implementation: {
+        Args: { p_confirm: boolean; p_id: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      submit_project_change_request: {
+        Args: { p_confirm: boolean; p_id: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2516,6 +3083,55 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      update_change_request_implementation_plan: {
+        Args: { p_id: string; p_owner: string; p_target: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       update_project_action: {
         Args: {
           p_action_id: string
@@ -2593,6 +3209,70 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_assumptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_project_change_request_draft: {
+        Args: {
+          p_budget: string
+          p_category: string
+          p_description: string
+          p_id: string
+          p_quality: string
+          p_reason: string
+          p_recommendation: string
+          p_requested_date: string
+          p_requester_name: string
+          p_resource: string
+          p_risk: string
+          p_schedule: string
+          p_scope: string
+          p_title: string
+        }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2830,6 +3510,55 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_assumptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      withdraw_project_change_request: {
+        Args: { p_confirm: boolean; p_id: string; p_notes: string }
+        Returns: {
+          budget_impact: string | null
+          category: string
+          created_at: string
+          created_by: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+          description: string
+          id: string
+          implementation_outcome_notes: string | null
+          implementation_owner_membership_id: string | null
+          implementation_plan_updated_at: string | null
+          implementation_plan_updated_by: string | null
+          implementation_started_at: string | null
+          implementation_started_by: string | null
+          implementation_target_date: string | null
+          last_edited_at: string
+          last_edited_by: string
+          outcome_recorded_at: string | null
+          outcome_recorded_by: string | null
+          project_id: string
+          quality_impact: string | null
+          reason: string
+          recommendation: string | null
+          requested_date: string
+          requester_name: string
+          resource_impact: string | null
+          risk_impact: string | null
+          schedule_impact: string | null
+          scope_impact: string | null
+          status: string
+          submitted_at: string | null
+          submitted_by: string | null
+          title: string
+          updated_at: string
+          withdrawal_notes: string | null
+          withdrawn_at: string | null
+          withdrawn_by: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_change_requests"
           isOneToOne: true
           isSetofReturn: false
         }

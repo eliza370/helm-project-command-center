@@ -1,0 +1,3 @@
+export type ChangeStatus="Draft"|"Submitted"|"Approved"|"Rejected"|"Withdrawn"|"In Implementation"|"Implemented"|"Not Implemented";
+export function getChangeAttention(status:ChangeStatus,target:string|null,today:string){if((status==="Approved"||status==="In Implementation")&&target&&target<today)return"Implementation overdue";if(status==="Draft")return"Draft - not submitted";if(status==="Submitted")return"Decision required";if(status==="Approved")return"Implementation not started";if(status==="In Implementation")return"Implementation underway";return"Terminal outcome recorded"}
+export const terminalChangeStatuses:ChangeStatus[]=["Rejected","Withdrawn","Implemented","Not Implemented"];

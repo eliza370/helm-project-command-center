@@ -125,3 +125,7 @@ Permissions for status reports, change requests, closure items, feature-specific
 # Status Report permissions
 
 Active organization Administrators and the actual assigned Project Manager may read, create, edit, and publish Status Report drafts. Active Project Members, Stakeholders, and Read Only users with project access may read Published reports only and cannot discover drafts. All mutations use focused database functions; direct insert, update, and delete access is denied. Publication and database Row Level Security independently recheck active organization and project authority.
+
+# Change Control permissions
+
+Active organization Administrators and the actual assigned Project Manager may read and mutate private Change Request drafts and perform every focused Change Control operation. Active Project Members, Stakeholders, and Read Only users may read Submitted and decided requests but cannot discover Drafts or mutate records. Requester, creator, submitter, decision actor, implementation owner, starter, and outcome attribution grant no permission. All writes use focused database functions; authenticated users receive no direct insert, update, or delete table grant.

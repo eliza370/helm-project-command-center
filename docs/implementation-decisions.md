@@ -130,3 +130,7 @@ Later vertical slices must define:
 # Status Report snapshots
 
 Published Status Reports store category-specific JSON presentation snapshots generated inside the publication transaction. Snapshot objects contain a total and a bounded item list; they do not contain generic polymorphic source links. Publication never mutates source records. Report health is initialized from current project health but remains independent, and publication preserves the selected values. Because source entities do not retain complete revision history, snapshots mean source state at publication classified using the report period, not reconstructed state as of the period end.
+
+## Project Change Control
+
+Change Requests use `Draft -> Submitted -> Approved -> In Implementation -> Implemented`, with Submitted-to-Rejected, Draft/Submitted-to-Withdrawn, and Approved/In-Implementation-to-Not-Implemented outcomes. Drafts are manager-private; all active authorized project roles may read formal records. Submission freezes the proposal and attests a complete scope, schedule, budget, resource, quality, and risk impact assessment. Approved records permit only audited implementation owner and target changes. Rejected, Withdrawn, Implemented, and Not Implemented records are terminal and immutable. The requester is durable text and grants no permission. Focused Change Control operations never mutate another project record and do not introduce generic workflow infrastructure.
