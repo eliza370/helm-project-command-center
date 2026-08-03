@@ -274,3 +274,6 @@ The MVP is successful when a project manager can:
 * Generate a useful status summary
 * Restrict project access to authorized users
 * Complete the primary workflow without using an external spreadsheet
+# Project Status Reporting
+
+The MVP includes protected Status Report registers, manager-authored drafts, deliberate publication, independent report health, narrative sections, and immutable publication-time project/source snapshots. Approval workflows, corrections and supersession, recall or unpublish, deletion or archive, comments, attachments, notifications, distribution, exports, AI narratives, templates, charts, custom sections, portfolio reporting, and generic source relationships are excluded.

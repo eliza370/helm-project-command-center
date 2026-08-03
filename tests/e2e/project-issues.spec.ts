@@ -1,3 +1,4 @@
+import { COMPLETE_LIFECYCLE_TIMEOUT, PROTECTED_ROUTE_READY_TIMEOUT, POST_ACTION_RENDER_TIMEOUT } from "./test-timeouts";
 import { expect, test, type Page } from "@playwright/test";
 import { randomUUID } from "node:crypto";
 import {
@@ -164,10 +165,13 @@ test.describe.serial("project issue register", () => {
     await expect(page).toHaveURL(/sign-in/);
     await login(page, users.outsider);
     await page.goto(`/projects/${projectId}/raid`);
-    await expect(page.getByRole("heading", { name: "Project not available" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Project not available" })).toBeVisible({
+      timeout: PROTECTED_ROUTE_READY_TIMEOUT,
+    });
   });
 
   test("administrator creates, blocks, and resolves an issue on mobile", async ({ page }) => {
+    test.setTimeout(COMPLETE_LIFECYCLE_TIMEOUT);
     await page.setViewportSize({ width: 390, height: 844 });
     await login(page, users.admin);
     await page.goto(`/projects/${projectId}`);
@@ -189,18 +193,18 @@ test.describe.serial("project issue register", () => {
     });
     await page.getByRole("button", { name: "Add issue" }).focus();
     await page.keyboard.press("Enter");
-    await expect(page.getByText("Issue added.")).toBeVisible();
+    await expect(page.getByText("Issue added.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     let card = page.locator("article").filter({ hasText: "Production outage" });
     await expect(card.getByText(/Attention required: Overdue resolution, Critical severity/)).toBeVisible();
     await card.getByLabel("Blocked reason for Production outage").fill("Waiting for recovery approval.");
     await card.getByRole("button", { name: "Mark blocked" }).click();
-    await expect(page.getByText("Issue status updated.")).toBeVisible();
+    await expect(page.getByText("Issue status updated.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     card = page.locator("article").filter({ hasText: "Production outage" });
     await expect(card.getByRole("definition").filter({ hasText: "Waiting for recovery approval." })).toBeVisible();
     await card.getByLabel("Resolution notes for Production outage").fill("Service restored and validated.");
     await card.getByLabel("Confirm resolve for Production outage").check();
     await card.getByRole("button", { name: "Resolve Production outage" }).click();
-    await expect(page.getByText("Issue resolved.")).toBeVisible();
+    await expect(page.getByText("Issue resolved.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     await expect(page.getByText("This terminal issue is read-only.")).toBeVisible();
     expect(await page.locator("body").evaluate((body) => body.scrollWidth)).toBeLessThanOrEqual(390);
     await page.reload();
@@ -224,7 +228,7 @@ test.describe.serial("project issue register", () => {
       origin: "Realized infrastructure outage",
     });
     await page.getByRole("button", { name: "Add issue" }).click();
-    await expect(page.getByText("Issue added.")).toBeVisible();
+    await expect(page.getByText("Issue added.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     let card = page.locator("article").filter({ hasText: "Linked infrastructure issue" });
     await expect(card.getByText("Realized infrastructure outage - Realized")).toBeVisible();
     await page.reload();
@@ -244,7 +248,7 @@ test.describe.serial("project issue register", () => {
       ownerIndex: 2,
     });
     await page.getByRole("button", { name: "Save issue" }).click();
-    await expect(page.getByText("Issue updated.")).toBeVisible();
+    await expect(page.getByText("Issue updated.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     card = page.locator("article").filter({ hasText: "Linked infrastructure issue revised" });
     await expect(card.getByText("Critical severity", { exact: true })).toBeVisible();
     await expect(card.getByText("Two delivery streams are delayed.")).toBeVisible();
@@ -269,7 +273,7 @@ test.describe.serial("project issue register", () => {
       target: "2026-08-30",
     });
     await page.getByRole("button", { name: "Add issue" }).click();
-    await expect(page.getByText("Issue added.")).toBeVisible();
+    await expect(page.getByText("Issue added.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     let card = page.locator("article").filter({ hasText: "Obsolete supplier issue" });
     const notes = card.getByLabel("Cancellation notes for Obsolete supplier issue");
     const confirmation = card.getByLabel("Confirm cancel for Obsolete supplier issue");
@@ -280,7 +284,7 @@ test.describe.serial("project issue register", () => {
     await expect(confirmation).toHaveJSProperty("validity.valueMissing", true);
     await confirmation.check();
     await card.getByRole("button", { name: "Cancel Obsolete supplier issue" }).click();
-    await expect(page.getByText("Issue cancelled.")).toBeVisible();
+    await expect(page.getByText("Issue cancelled.")).toBeVisible({ timeout: POST_ACTION_RENDER_TIMEOUT });
     card = page.locator("article").filter({ hasText: "Obsolete supplier issue" });
     await expect(card.locator("dt").filter({ hasText: /^Cancelled$/ })).toBeVisible();
     await expect(card.getByText(/by Issue Admin\. Replacement delivery path confirmed/)).toBeVisible();

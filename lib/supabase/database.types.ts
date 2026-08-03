@@ -1015,6 +1015,137 @@ export type Database = {
           },
         ]
       }
+      project_status_reports: {
+        Row: {
+          accomplishments: string
+          budget_health: string
+          concerns: string | null
+          created_at: string
+          created_by: string
+          decisions_required: string | null
+          executive_summary: string
+          id: string
+          last_edited_at: string
+          last_edited_by: string
+          overall_health: string
+          overdue_actions_snapshot: Json | null
+          planned_work: string
+          project_id: string
+          project_lifecycle_phase_snapshot: string | null
+          project_name_snapshot: string | null
+          project_status_snapshot: string | null
+          published_at: string | null
+          published_by: string | null
+          recent_decisions_snapshot: Json | null
+          reporting_period_end: string
+          reporting_period_start: string
+          resource_health: string
+          risk_health: string
+          schedule_health: string
+          scope_health: string
+          status: string
+          support_required: string | null
+          top_issues_snapshot: Json | null
+          top_risks_snapshot: Json | null
+          upcoming_milestones_snapshot: Json | null
+        }
+        Insert: {
+          accomplishments: string
+          budget_health: string
+          concerns?: string | null
+          created_at?: string
+          created_by: string
+          decisions_required?: string | null
+          executive_summary: string
+          id?: string
+          last_edited_at?: string
+          last_edited_by: string
+          overall_health: string
+          overdue_actions_snapshot?: Json | null
+          planned_work: string
+          project_id: string
+          project_lifecycle_phase_snapshot?: string | null
+          project_name_snapshot?: string | null
+          project_status_snapshot?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          recent_decisions_snapshot?: Json | null
+          reporting_period_end: string
+          reporting_period_start: string
+          resource_health: string
+          risk_health: string
+          schedule_health: string
+          scope_health: string
+          status?: string
+          support_required?: string | null
+          top_issues_snapshot?: Json | null
+          top_risks_snapshot?: Json | null
+          upcoming_milestones_snapshot?: Json | null
+        }
+        Update: {
+          accomplishments?: string
+          budget_health?: string
+          concerns?: string | null
+          created_at?: string
+          created_by?: string
+          decisions_required?: string | null
+          executive_summary?: string
+          id?: string
+          last_edited_at?: string
+          last_edited_by?: string
+          overall_health?: string
+          overdue_actions_snapshot?: Json | null
+          planned_work?: string
+          project_id?: string
+          project_lifecycle_phase_snapshot?: string | null
+          project_name_snapshot?: string | null
+          project_status_snapshot?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          recent_decisions_snapshot?: Json | null
+          reporting_period_end?: string
+          reporting_period_start?: string
+          resource_health?: string
+          risk_health?: string
+          schedule_health?: string
+          scope_health?: string
+          status?: string
+          support_required?: string | null
+          top_issues_snapshot?: Json | null
+          top_risks_snapshot?: Json | null
+          upcoming_milestones_snapshot?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_status_reports_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_status_reports_last_edited_by_fkey"
+            columns: ["last_edited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_status_reports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_status_reports_published_by_fkey"
+            columns: ["published_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           actual_completion_date: string | null
@@ -1535,6 +1666,64 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      create_project_status_report: {
+        Args: {
+          p_accomplishments: string
+          p_budget_health: string
+          p_concerns: string
+          p_decisions_required: string
+          p_executive_summary: string
+          p_overall_health: string
+          p_planned_work: string
+          p_project_id: string
+          p_reporting_period_end: string
+          p_reporting_period_start: string
+          p_resource_health: string
+          p_risk_health: string
+          p_schedule_health: string
+          p_scope_health: string
+          p_support_required: string
+        }
+        Returns: {
+          accomplishments: string
+          budget_health: string
+          concerns: string | null
+          created_at: string
+          created_by: string
+          decisions_required: string | null
+          executive_summary: string
+          id: string
+          last_edited_at: string
+          last_edited_by: string
+          overall_health: string
+          overdue_actions_snapshot: Json | null
+          planned_work: string
+          project_id: string
+          project_lifecycle_phase_snapshot: string | null
+          project_name_snapshot: string | null
+          project_status_snapshot: string | null
+          published_at: string | null
+          published_by: string | null
+          recent_decisions_snapshot: Json | null
+          reporting_period_end: string
+          reporting_period_start: string
+          resource_health: string
+          risk_health: string
+          schedule_health: string
+          scope_health: string
+          status: string
+          support_required: string | null
+          top_issues_snapshot: Json | null
+          top_risks_snapshot: Json | null
+          upcoming_milestones_snapshot: Json | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_status_reports"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       fail_project_dependency: {
         Args: { p_dependency_id: string; p_outcome_notes: string }
         Returns: {
@@ -1943,6 +2132,48 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_dependencies"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      publish_project_status_report: {
+        Args: { p_confirm: boolean; p_report_id: string }
+        Returns: {
+          accomplishments: string
+          budget_health: string
+          concerns: string | null
+          created_at: string
+          created_by: string
+          decisions_required: string | null
+          executive_summary: string
+          id: string
+          last_edited_at: string
+          last_edited_by: string
+          overall_health: string
+          overdue_actions_snapshot: Json | null
+          planned_work: string
+          project_id: string
+          project_lifecycle_phase_snapshot: string | null
+          project_name_snapshot: string | null
+          project_status_snapshot: string | null
+          published_at: string | null
+          published_by: string | null
+          recent_decisions_snapshot: Json | null
+          reporting_period_end: string
+          reporting_period_start: string
+          resource_health: string
+          risk_health: string
+          schedule_health: string
+          scope_health: string
+          status: string
+          support_required: string | null
+          top_issues_snapshot: Json | null
+          top_risks_snapshot: Json | null
+          upcoming_milestones_snapshot: Json | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_status_reports"
           isOneToOne: true
           isSetofReturn: false
         }
@@ -2502,6 +2733,64 @@ export type Database = {
         SetofOptions: {
           from: "*"
           to: "project_risks"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_project_status_report: {
+        Args: {
+          p_accomplishments: string
+          p_budget_health: string
+          p_concerns: string
+          p_decisions_required: string
+          p_executive_summary: string
+          p_overall_health: string
+          p_planned_work: string
+          p_report_id: string
+          p_reporting_period_end: string
+          p_reporting_period_start: string
+          p_resource_health: string
+          p_risk_health: string
+          p_schedule_health: string
+          p_scope_health: string
+          p_support_required: string
+        }
+        Returns: {
+          accomplishments: string
+          budget_health: string
+          concerns: string | null
+          created_at: string
+          created_by: string
+          decisions_required: string | null
+          executive_summary: string
+          id: string
+          last_edited_at: string
+          last_edited_by: string
+          overall_health: string
+          overdue_actions_snapshot: Json | null
+          planned_work: string
+          project_id: string
+          project_lifecycle_phase_snapshot: string | null
+          project_name_snapshot: string | null
+          project_status_snapshot: string | null
+          published_at: string | null
+          published_by: string | null
+          recent_decisions_snapshot: Json | null
+          reporting_period_end: string
+          reporting_period_start: string
+          resource_health: string
+          risk_health: string
+          schedule_health: string
+          scope_health: string
+          status: string
+          support_required: string | null
+          top_issues_snapshot: Json | null
+          top_risks_snapshot: Json | null
+          upcoming_milestones_snapshot: Json | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "project_status_reports"
           isOneToOne: true
           isSetofReturn: false
         }

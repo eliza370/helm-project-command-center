@@ -4,6 +4,10 @@
 
 This document records approved decisions that resolve early product, domain, and authorization questions. Detailed entity definitions remain in `docs/domain-model.md`, and access rules remain in `docs/permissions-model.md`.
 
+## Local end-to-end test concurrency
+
+Helm's local Playwright suite is capped at four workers. This reflects the measured capacity of the local Next.js and Supabase development stack: six-worker governance runs produced aggregate protected-route rendering latency even though server actions and PostgreSQL RPCs completed successfully. Four workers preserve parallel coverage while providing deterministic execution. Retries, skipped tests, and suite-wide serialization remain prohibited. The cap can be reassessed if the server environment or CI architecture changes.
+
 ## Approved Initial Decisions
 
 ### Identity and onboarding
@@ -123,3 +127,6 @@ Later vertical slices must define:
 * Published status-report snapshot storage and reference presentation
 * Feature-specific approval workflows
 * Audit-event coverage and retention for each governance feature
+# Status Report snapshots
+
+Published Status Reports store category-specific JSON presentation snapshots generated inside the publication transaction. Snapshot objects contain a total and a bounded item list; they do not contain generic polymorphic source links. Publication never mutates source records. Report health is initialized from current project health but remains independent, and publication preserves the selected values. Because source entities do not retain complete revision history, snapshots mean source state at publication classified using the report period, not reconstructed state as of the period end.

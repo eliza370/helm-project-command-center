@@ -725,3 +725,8 @@ The first complete vertical slice should implement only:
 8. Required authorization and validation
 
 All other entities should be added incrementally as complete vertical features.
+# Project Status Reports
+
+A Status Report is a stakeholder-readable project summary for an exact completed reporting period. It has a `Draft -> Published` lifecycle. Drafts use independently editable six-dimension health and show clearly labelled live project context. Publication copies mutable project headings and bounded, category-specific snapshots of upcoming Milestones, top active Risks, top active Issues, overdue Actions, and recent Decisions. Published reports are immutable historical publication-time snapshots; they are not reconstructions of source state at the reporting-period end.
+
+Required narratives are executive summary, accomplishments, and planned work. Concerns, decisions required, and support required are optional. Creator, latest draft editor, and publisher identities and timestamps are trusted audit data. One report is allowed per project and exact reporting-period pair. Correction, supersession, recall, unpublish, archive, and deletion are deferred.

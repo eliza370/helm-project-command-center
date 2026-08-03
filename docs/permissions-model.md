@@ -122,3 +122,6 @@ Reads use project-access Row Level Security. Writes use focused database functio
 ## Deferred Permissions
 
 Permissions for status reports, change requests, closure items, feature-specific approvals, and other later modules will be defined with those vertical slices. No generic comment or approval permission is introduced now.
+# Status Report permissions
+
+Active organization Administrators and the actual assigned Project Manager may read, create, edit, and publish Status Report drafts. Active Project Members, Stakeholders, and Read Only users with project access may read Published reports only and cannot discover drafts. All mutations use focused database functions; direct insert, update, and delete access is denied. Publication and database Row Level Security independently recheck active organization and project authority.

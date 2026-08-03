@@ -1,0 +1,1 @@
+"use client";export default function Error({reset}:{reset:()=>void}){return <main className="mx-auto max-w-3xl px-5 py-10"><h1 className="text-2xl font-semibold">Status Reports could not be loaded</h1><p className="mt-2">Try again without losing any saved report.</p><button onClick={reset} className="mt-4 rounded-lg bg-slate-950 px-4 py-2 text-white">Try again</button></main>}
